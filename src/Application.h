@@ -15,9 +15,9 @@ protected:
 public:
 	Application();
 	~Application();
-	virtual bool Startup() = 0;
+	virtual int Startup() = 0;
 	virtual void Shutdown() = 0;
-	virtual bool Update() = 0;
+	virtual int Update() = 0;
 	virtual void Draw() = 0;
 };
 

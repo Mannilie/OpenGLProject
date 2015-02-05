@@ -20,8 +20,8 @@ private:
 public:
 	SolarSystemApp();
 	~SolarSystemApp();
-	bool Startup();
-	bool Update();
+	int Startup();
+	int Update();
 	void Draw();
 	void Shutdown();
 

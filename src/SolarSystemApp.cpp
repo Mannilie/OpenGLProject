@@ -10,15 +10,15 @@ SolarSystemApp::~SolarSystemApp()
 
 }
 
-bool SolarSystemApp::Startup()
+int SolarSystemApp::Startup()
 {
 	if (glfwInit() == false)
-		return false;
+		return -1;
 
 	m_Window = glfwCreateWindow(1280, 720, "Computer Graphics - EV", nullptr, nullptr);
 
 	if (m_Window == nullptr)
-		return false;
+		return -2;
 
 	glfwMakeContextCurrent(m_Window);
 
@@ -26,7 +26,7 @@ bool SolarSystemApp::Startup()
 	{
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
-		return false;
+		return -3;
 	}
 
 	int major_version = ogl_GetMajorVersion();
@@ -45,7 +45,7 @@ bool SolarSystemApp::Startup()
 	m_cameraZ = -10.0f;
 	m_timer = 0.0f;
 
-	return true;
+	return 0;
 }
 
 void SolarSystemApp::Shutdown()
@@ -56,13 +56,13 @@ void SolarSystemApp::Shutdown()
 	glfwTerminate();
 }
 
-bool SolarSystemApp::Update()
+int SolarSystemApp::Update()
 {
 	if (glfwWindowShouldClose(m_Window))
-		return false;
+		return -1;
 
 	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		return false;
+		return -2;
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -95,9 +95,9 @@ bool SolarSystemApp::Update()
 	for (int i = 0; i <= 20; ++i)
 	{
 		Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10),
-			i == 10 ? white : black);
+			i == 10 ? blue : black);
 		Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i),
-			i == 10 ? white : black);
+			i == 10 ? red : black);
 	}
 
 	mat4 sun_transform = BuildOrbitMatrix(m_timer, 0, 0);
@@ -129,7 +129,7 @@ bool SolarSystemApp::Update()
 	//Gizmos::addAABBFilled(vec3(0, 5, 1), vec3(1, 1, 1), blue);
 	//Gizmos::addAABB(vec3(0, 5, 1), vec3(1, 1, 1), blue);
 	//Gizmos::addTri(vec3(0, 1, 0), vec3(2, -1, 1), vec3(-3, -2, 4), green);
-	return true;
+	return 0;
 }
 
 void SolarSystemApp::Draw()
