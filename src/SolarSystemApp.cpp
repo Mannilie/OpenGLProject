@@ -58,7 +58,7 @@ void SolarSystemApp::Shutdown()
 
 bool SolarSystemApp::Update()
 {
-	if (glfwWindowShouldClose(m_Window) == true)
+	if (glfwWindowShouldClose(m_Window))
 		return false;
 
 	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -67,6 +67,11 @@ bool SolarSystemApp::Update()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Gizmos::clear();
+
+	int iScreenWidth, iScreenHeight;
+	glfwGetWindowSize(m_Window, &iScreenWidth, &iScreenHeight);
+	glfwGetFramebufferSize(m_Window, &iScreenWidth, &iScreenHeight);					//Sets the frame buffer size
+	glViewport(0, 0, iScreenWidth, iScreenHeight);
 
 	//--- Game Code ---
 
@@ -77,7 +82,7 @@ bool SolarSystemApp::Update()
 	m_cameraX = sinf(m_timer) * 10;
 	m_cameraZ = cosf(m_timer) * 10;
 
-	mat4 view = glm::lookAt(vec3(m_cameraX, 10, m_cameraZ), vec3(0, 0, 0), vec3(0, 1, 0));
+	view = glm::lookAt(vec3(m_cameraX, 10, m_cameraZ), vec3(0, 0, 0), vec3(0, 1, 0));
 	//mat4 view = glm::lookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
 	Gizmos::addTransform(mat4(1));
 
@@ -124,18 +129,15 @@ bool SolarSystemApp::Update()
 	//Gizmos::addAABBFilled(vec3(0, 5, 1), vec3(1, 1, 1), blue);
 	//Gizmos::addAABB(vec3(0, 5, 1), vec3(1, 1, 1), blue);
 	//Gizmos::addTri(vec3(0, 1, 0), vec3(2, -1, 1), vec3(-3, -2, 4), green);
-
-	Gizmos::draw(projection, view);
-
-
-	glfwSwapBuffers(m_Window);
-	glfwPollEvents();
 	return true;
 }
 
 void SolarSystemApp::Draw()
 {
+	Gizmos::draw(projection, view);
 
+	glfwSwapBuffers(m_Window);
+	glfwPollEvents();
 }
 
 mat4 SolarSystemApp::BuildOrbitMatrix(float local_rotation, float radius, float orbit_rotation)

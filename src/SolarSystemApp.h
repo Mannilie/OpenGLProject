@@ -13,6 +13,7 @@ class SolarSystemApp : public Application
 {
 private:
 	mat4 projection;
+	mat4 view;
 	float m_cameraX;
 	float m_cameraZ;
 	float m_timer;
