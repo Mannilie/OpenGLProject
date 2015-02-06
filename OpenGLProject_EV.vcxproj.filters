@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Cameras">
+      <UniqueIdentifier>{7a7b87de-2ec8-4e03-a9f6-4b05bfa109d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Cameras">
+      <UniqueIdentifier>{21587749-2019-483e-a5ab-43cf05e2297a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -24,8 +30,14 @@
     <ClInclude Include="src\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\SolarSystemApp.h">
+    <ClInclude Include="src\IntroToOpenGL.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CameraAndProjections.h">
+      <Filter>Header Files\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Header Files\Cameras</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,8 +53,14 @@
     <ClCompile Include="src\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SolarSystemApp.cpp">
+    <ClCompile Include="src\IntroToOpenGL.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraAndProjections.cpp">
+      <Filter>Source Files\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files\Cameras</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

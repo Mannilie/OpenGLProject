@@ -1,26 +1,33 @@
 #ifndef _APPLICATION_H_
 #define _APPLICATION_H_
 
-#include "gl_core_4_4.h"
-#include <GLFW\glfw3.h>
-
 #define GLM_SWIZZLE
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
+using glm::vec2;
+using glm::vec3;
+using glm::vec4;
+using glm::mat4;
+
+class GLFWwindow;
+
 class Application
 {
 protected:
-	GLFWwindow* m_Window;
+	GLFWwindow* m_window;
+	char* m_appName;
+	int m_windowWidth;
+	int m_windowHeight;
 public:
 	Application();
-	~Application();
-	virtual int Startup() = 0;
-	virtual void Shutdown() = 0;
-	virtual int Update() = 0;
-	virtual void Draw() = 0;
+	virtual ~Application();
+
+	void SetDefault(float a_windowWidth, float a_windowHeight, char* a_appName);
+	virtual bool Startup();
+	virtual bool Update();
+	virtual void Draw();
+	virtual void Shutdown();
 };
 
-
-
-#endif
+#endif //_APPLICATION_H_

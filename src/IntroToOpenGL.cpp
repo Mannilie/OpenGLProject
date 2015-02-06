@@ -1,34 +1,51 @@
-#include "SolarSystemApp.h"
+#include "IntroToOpenGL.h"
 
-SolarSystemApp::SolarSystemApp()
+#include "gl_core_4_4.h"
+#include <GLFW\glfw3.h>
+#include "Gizmos.h"
+
+bool IntroToOpenGL::Startup()
 {
+	if (Application::Startup() == false) //Checks if the application failed to start up
+	{
+		return false;
+	}
 
-}
+	glEnable(GL_DEPTH_TEST);
 
-SolarSystemApp::~SolarSystemApp()
-{
-
-}
-
-int SolarSystemApp::Startup()
-{
-	m_cameraX = -10.0f;
-	m_cameraZ = -10.0f;
+	Gizmos::create();
+	
+	m_projection = glm::perspective(glm::radians(60.0f), 1280.0f / 720.0f, 0.1f, 1000.0f);
+	m_cameraX = -5.0f;
+	m_cameraZ = -5.0f;
 	m_timer = 0.0f;
-	return 0;
+
+	return true;
 }
 
-void SolarSystemApp::Shutdown()
+void IntroToOpenGL::Shutdown()
 {
 	Gizmos::destroy();
+	Application::Shutdown();
 }
 
-int SolarSystemApp::Update()
+bool IntroToOpenGL::Update()
 {
-	if (glfwGetKey(this->m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		return -2; 
+	if (Application::Update() == false)
+	{
+		return false;
+	}
 
-	//--- Game Code --
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	int iScreenWidth, iScreenHeight;
+	glfwGetWindowSize(this->m_window, &iScreenWidth, &iScreenHeight);
+	glfwGetFramebufferSize(this->m_window, &iScreenWidth, &iScreenHeight);					//Sets the frame buffer size
+	glViewport(0, 0, iScreenWidth, iScreenHeight);
+
+	Gizmos::clear();
+
 	float delta = (float)glfwGetTime();
 	glfwSetTime(0.0f);
 
@@ -83,18 +100,17 @@ int SolarSystemApp::Update()
 	//Gizmos::addAABBFilled(vec3(0, 5, 1), vec3(1, 1, 1), blue);
 	//Gizmos::addAABB(vec3(0, 5, 1), vec3(1, 1, 1), blue);
 	//Gizmos::addTri(vec3(0, 1, 0), vec3(2, -1, 1), vec3(-3, -2, 4), green);
-	return 0;
+	return true;
 }
 
-void SolarSystemApp::Draw()
+void IntroToOpenGL::Draw()
 {
-	Gizmos::draw(m_projection, view);
+	Gizmos::draw(m_projection, m_view);
 
-	glfwSwapBuffers(m_Window);
-	glfwPollEvents();
+	Application::Draw();
 }
 
-mat4 SolarSystemApp::BuildOrbitMatrix(float local_rotation, float radius, float orbit_rotation)
+mat4 IntroToOpenGL::BuildOrbitMatrix(float local_rotation, float radius, float orbit_rotation)
 {
 	mat4 result = glm::rotate(orbit_rotation, vec3(0, 1, 0)) *
 		glm::translate(vec3(radius, 0, 0)) *
