@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Cameras">
       <UniqueIdentifier>{21587749-2019-483e-a5ab-43cf05e2297a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\RenderingGeometry">
+      <UniqueIdentifier>{bb1d3768-d715-4863-9630-b487e42c4c86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RenderingGeometry">
+      <UniqueIdentifier>{453a5fed-cfed-4d20-8171-1cac94a50ad3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -38,6 +44,18 @@
     </ClInclude>
     <ClInclude Include="src\Camera.h">
       <Filter>Header Files\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RenderingGeometry.h">
+      <Filter>Header Files\RenderingGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GLM_Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vertex.h">
+      <Filter>Header Files\RenderingGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +79,12 @@
     </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderingGeometry.cpp">
+      <Filter>Source Files\RenderingGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

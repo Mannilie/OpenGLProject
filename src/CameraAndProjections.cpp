@@ -15,17 +15,18 @@ bool CameraAndProjections::Startup()
 		return false;
 	}
 
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	glEnable(GL_DEPTH_TEST);
 	Gizmos::create();
 	glfwSetTime(0.0f);
 
-	m_Camera = FlyCamera(60.0f, 1280 / 720, 10.0f);
+	m_Camera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
 	m_Camera.m_fieldOfView = 60.0f;
 	m_Camera.m_aspect = m_windowWidth / m_windowHeight;
 	m_Camera.setMoveSpeed(100.0f);
 	m_Camera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
 	m_Camera.setFOVSpeed(100.0f);
+
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
 	return true;
 }
 

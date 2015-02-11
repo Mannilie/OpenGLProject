@@ -51,7 +51,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;GLM_FORCE_PURE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;GLM_FORCE_PURE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -78,8 +78,12 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\CameraAndProjections.h" />
     <ClInclude Include="src\Gizmos.h" />
+    <ClInclude Include="src\GLM_Header.h" />
     <ClInclude Include="src\gl_core_4_4.h" />
     <ClInclude Include="src\IntroToOpenGL.h" />
+    <ClInclude Include="src\RenderingGeometry.h" />
+    <ClInclude Include="src\Utility.h" />
+    <ClInclude Include="src\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -89,6 +93,8 @@
     <ClCompile Include="src\gl_core_4_4.c" />
     <ClCompile Include="src\IntroToOpenGL.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\RenderingGeometry.cpp" />
+    <ClCompile Include="src\Utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

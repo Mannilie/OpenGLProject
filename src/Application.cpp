@@ -5,6 +5,11 @@
 
 #include <cstdio>
 
+void window_size_callback(GLFWwindow* window, int width, int height)
+{
+	printf("Window is resizing! %d.%d\n");
+}
+
 Application::Application() 
 	: m_windowWidth(0)
 	, m_windowHeight(0)
@@ -24,8 +29,8 @@ bool Application::Startup()
 {
 	if (m_windowWidth == 0 || m_windowHeight == 0 || m_appName == "")
 	{
-		m_windowWidth = 1280;
-		m_windowHeight = 700;
+		m_windowWidth = 1280.0f;
+		m_windowHeight = 700.0f;
 		m_appName = "Default Project";
 	}
 	
@@ -34,7 +39,7 @@ bool Application::Startup()
 		return false;
 	}
 
-	this->m_window = glfwCreateWindow(m_windowWidth, m_windowHeight, m_appName, nullptr, nullptr);
+	this->m_window = glfwCreateWindow((int)m_windowWidth, (int)m_windowHeight, m_appName, nullptr, nullptr);
 
 	if (this->m_window == nullptr)
 	{
@@ -54,6 +59,9 @@ bool Application::Startup()
 	int minor_version = ogl_GetMinorVersion();
 
 	printf("successfully loaded OpenGL version %d.%d\n", major_version, minor_version);
+
+	glfwSetWindowSizeCallback(this->m_window, window_size_callback);
+
 	return true;
 }
 
@@ -64,9 +72,13 @@ bool Application::Update()
 		return false;
 	}
 
-	glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
-	glfwGetFramebufferSize(m_window, &m_windowWidth, &m_windowHeight);
+	int width, height;
+	glfwGetWindowSize(m_window, &width, &height);
+	glfwGetFramebufferSize(m_window, &width, &height);
 	glViewport(0, 0, m_windowWidth, m_windowHeight);
+
+	m_windowWidth = (float)width;
+	m_windowHeight = (float)height;
 
 	return true;
 }

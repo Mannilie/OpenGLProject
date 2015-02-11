@@ -29,10 +29,31 @@ Camera::Camera(vec3 a_pos, vec3 a_center, vec3 a_up, float a_fieldOfView, float 
 	, m_near(a_near)
 	, m_far(a_far)
 	, m_sensitivity(1.0f)
+	, m_windowWidth(0.0f)
+	, m_windowHeight(0.0f)
 {
 	m_view = glm::lookAt(a_pos, a_center, a_up);
 	m_world = glm::inverse(m_view);
 	m_proj = glm::perspective(glm::radians(a_fieldOfView), a_aspect, a_near, a_far);
+	m_mouseDown = false;
+	updateProjView();
+}
+
+Camera::Camera(vec3 a_pos, vec3 a_center, vec3 a_up, float a_fieldOfView, float a_width, float a_height, float a_near, float a_far)
+: m_pos(a_pos)
+, m_center(a_center)
+, m_up(a_up)
+, m_aspect(a_width / a_height)
+, m_fieldOfView(a_fieldOfView)
+, m_near(a_near)
+, m_far(a_far)
+, m_sensitivity(1.0f)
+, m_windowWidth(a_width)
+, m_windowHeight(a_height)
+{
+	m_view = glm::lookAt(a_pos, a_center, a_up);
+	m_world = glm::inverse(m_view);
+	m_proj = glm::perspective(glm::radians(a_fieldOfView), a_width / a_height, a_near, a_far);
 	m_mouseDown = false;
 	updateProjView();
 }
@@ -46,6 +67,14 @@ void Camera::setPerspective(float a_fieldOfView, float a_aspect, float a_near, f
 	m_aspect = a_aspect;
 	m_fieldOfView = a_fieldOfView;
 	m_proj = glm::perspective(glm::radians(a_fieldOfView), a_aspect, a_near, a_far);
+	updateProjView();
+}
+
+void Camera::setPerspective(float a_fieldOfView, float a_width, float a_height, float a_near, float a_far)
+{
+	m_aspect = a_width / a_height;
+	m_fieldOfView = a_fieldOfView;
+	m_proj = glm::perspective(glm::radians(a_fieldOfView), m_aspect, a_near, a_far);
 	updateProjView();
 }
 
@@ -93,7 +122,7 @@ FlyCamera::FlyCamera()
 	: m_moveSpeed(60.0f)
 	, m_fovSpeed(10.0f)
 	, m_up(vec3(0, 1, 0))
-	, Camera(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0), 60.0f, 1280 / 720, 0.1f, 1000.0f)
+	, Camera(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0), 60.0f, 1280, 720, 0.1f, 1000.0f)
 {
 }
 
@@ -110,6 +139,11 @@ FlyCamera::~FlyCamera()
 
 void FlyCamera::update(float a_DeltaTime)
 {
+	if (m_windowWidth == 0 || m_windowHeight == 0)
+	{
+		m_aspect = 1280.0f / 720.0f;
+	}
+
 	GLFWwindow* curr_window = glfwGetCurrentContext();
 
 	if (glfwGetKey(curr_window,
@@ -141,20 +175,20 @@ void FlyCamera::update(float a_DeltaTime)
 		m_mouseDown = true;
 		glfwGetCursorPos(curr_window, &prevMouseX, &prevMouseY);
 
-		glfwSetCursorPos(curr_window, 1280 / 2.0f, 700 / 2.0f);
+		glfwSetCursorPos(curr_window, m_windowWidth / 2.0f, m_windowHeight / 2.0f);
 		glfwSetInputMode(curr_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	}
 	else if (m_mouseDown == true)
 	{
 		double mouseX, mouseY;
 		glfwGetCursorPos(curr_window, &mouseX, &mouseY);
-		glfwSetCursorPos(curr_window, 1280 / 2.0f, 700 / 2.0f);
+		glfwSetCursorPos(curr_window, m_windowWidth / 2.0f, m_windowHeight / 2.0f);
 
-		mouseX -= (1280.0f / 2.0f);
-		mouseY -= (700.0f / 2.0f);
+		mouseX -= (m_windowWidth / 2.0f);
+		mouseY -= (m_windowHeight / 2.0f);
 
-		mouseX /= (1280.0f / 2.0f);
-		mouseY /= (700.0f / 2.0f);
+		mouseX /= (m_windowWidth / 2.0f);
+		mouseY /= (m_windowHeight / 2.0f);
 
 		mouseX *= -m_sensitivity;
 		mouseY *= -m_sensitivity;
@@ -169,7 +203,7 @@ void FlyCamera::update(float a_DeltaTime)
 		m_world[0] = rot * m_world[0];
 		m_world[1] = rot * m_world[1];
 		m_world[2] = rot * m_world[2];
-	}	
+	}
 	if (glfwGetMouseButton(curr_window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE && m_mouseDown == true)
 	{
 		m_mouseDown = false;

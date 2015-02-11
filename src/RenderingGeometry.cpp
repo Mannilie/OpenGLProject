@@ -1,0 +1,231 @@
+#include "RenderingGeometry.h"
+#include "GLM_Header.h"
+
+#include "gl_core_4_4.h"
+#include <GLFW\glfw3.h>
+
+#include "Gizmos.h"
+
+#include "Vertex.h"
+
+bool RenderingGeometry::Startup()
+{
+	if (Application::Startup() == false)
+	{
+		return false;
+	}
+
+	GenerateShader();
+	GenerateGrid(1024, 1024);
+
+	Gizmos::create();
+
+	m_Camera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
+	m_Camera.m_fieldOfView = 60.0f;
+	m_Camera.m_aspect = m_windowWidth / m_windowHeight;
+	m_Camera.setMoveSpeed(100.0f);
+	m_Camera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
+	m_Camera.setFOVSpeed(100.0f);
+
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
+	m_time = 0;
+
+	m_heightScale = 40.0f;
+	m_waveSpeed = 10.0f;
+	return true;
+}
+
+void RenderingGeometry::Shutdown()
+{
+
+
+	Application::Shutdown();
+}
+
+bool RenderingGeometry::Update()
+{
+	if (Application::Update() == false)
+	{
+		return false;
+	}
+
+	float deltaTime = (float)glfwGetTime();
+	glfwSetTime(0.0f);
+
+	Gizmos::addTransform(mat4(1));
+
+	vec4 white(1);
+	vec4 black(0, 0, 0, 1);
+	vec4 red(1, 0, 0, 1);
+	vec4 green(0, 1, 0, 1);
+	vec4 blue(0, 0, 1, 1);
+
+	for (int i = 0; i <= 20; ++i)
+	{
+		Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10),
+			i == 10 ? blue : black);
+		Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i),
+			i == 10 ? red : black);
+	}
+
+	m_time += m_waveSpeed * deltaTime;
+
+	m_Camera.m_windowWidth = m_windowWidth;
+	m_Camera.m_windowHeight = m_windowHeight;
+	m_Camera.update(deltaTime);
+
+	return true;
+}
+
+void RenderingGeometry::Draw()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindVertexArray(m_VAO);
+
+	glUseProgram(m_programID);
+
+	unsigned int projViewHandle = glGetUniformLocation(m_programID, "projView");
+	unsigned int timeHandle = glGetUniformLocation(m_programID, "time");
+	unsigned int heightScaleHandle = glGetUniformLocation(m_programID, "heightScale");
+	if (projViewHandle >= 0)
+	{
+		glUniformMatrix4fv(projViewHandle, 1, GL_FALSE, (float*)&m_Camera.m_projView);
+		glUniform1f(timeHandle, m_time);
+		glUniform1f(heightScaleHandle, m_heightScale);
+	}
+
+	glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+
+	Gizmos::draw(m_Camera.m_projView);
+
+	Application::Draw();
+}
+
+void RenderingGeometry::GenerateGrid(unsigned int a_rows, unsigned int a_cols)
+{
+	//Sets up Vertexes
+	Vertex* vertexArray = new Vertex[(a_rows + 1) * (a_cols + 1)];
+	for (unsigned int row = 0; row < a_rows + 1; ++row)
+	{
+		for (unsigned int col = 0; col < a_cols + 1; ++col)
+		{
+			vec4 position = vec4((float)col, 0, (float)row, 1);
+			vertexArray[col + row * (a_cols + 1)].position = position;
+
+			vec4 color = vec4(sinf((col / (float)(a_cols + 1)) * (row / (float)(a_rows + 1))));
+			vertexArray[col + row * (a_cols + 1)].color = color;
+			//std::cout << "you" << std::endl;
+		}
+	}
+
+	m_indexCount = a_rows * a_cols * 6;
+
+	//Sets up Indicies
+	unsigned int* indexArray = new unsigned int[m_indexCount];
+	int indexLocation = 0;
+	for (unsigned int row = 0; row < a_rows; ++row)
+	{
+		for (unsigned int col = 0; col < a_cols; ++col)
+		{
+			//Triangle 1
+			indexArray[indexLocation + 0] = col + row * (a_cols + 1);
+			indexArray[indexLocation + 1] = col + (row + 1) * (a_cols + 1);
+			indexArray[indexLocation + 2] = (col + 1) + row * (a_cols + 1);
+
+			//Triangle 2
+			indexArray[indexLocation + 3] = (col + 1) + row * (a_cols + 1);
+			indexArray[indexLocation + 4] = col + (row + 1) * (a_cols + 1);
+			indexArray[indexLocation + 5] = (col + 1) + (row + 1) * (a_cols + 1);
+
+			indexLocation += 6;
+		}
+	}
+
+	glGenBuffers(1, &m_VBO);
+	glGenBuffers(1, &m_IBO);
+	glGenVertexArrays(1, &m_VAO);
+
+	glBindVertexArray(m_VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+	glBufferData(GL_ARRAY_BUFFER, (a_cols + 1)*(a_rows + 1)*sizeof(Vertex), vertexArray, GL_STATIC_DRAW);
+	
+	glEnableVertexAttribArray(0); //position
+	glEnableVertexAttribArray(1); //color
+
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(vec4));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(unsigned int), indexArray, GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	delete[] vertexArray;
+	delete[] indexArray;
+}
+
+void RenderingGeometry::GenerateShader()
+{
+	const char* vertSource ="#version 410\n 									"
+						   	"in vec4 Position; 									"
+							"in vec4 Color; 									"
+							"out vec4 outColor; 								"
+							"uniform mat4 projView; 							"
+							"uniform float time;								"
+							"uniform float heightScale;							"
+							"void main() 										"
+							"{ 													"
+							"	outColor = Color; 								"
+							"	vec4 P = Position;								"
+							"	P.y += sin( time + Position.x ) * heightScale;	"
+							"	gl_Position = projView * P; 					"
+							"}													";
+
+							
+	const char* fragSource ="#version 410\n				"
+						   	"in vec4 outColor; 			"
+							"out vec4 fragColor; 		"
+							"void main() 				"
+							"{ 							"
+							"	fragColor = outColor; 	"
+							"}							";
+
+	unsigned int vertShader = glCreateShader(GL_VERTEX_SHADER);
+	unsigned int fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+	glShaderSource(vertShader, 1, &vertSource, 0);
+	glCompileShader(vertShader);
+
+	glShaderSource(fragShader, 1, &fragSource, 0);
+	glCompileShader(fragShader);
+
+	m_programID = glCreateProgram();
+	glAttachShader(m_programID, vertShader);
+	glAttachShader(m_programID, fragShader);
+	glBindAttribLocation(m_programID, 0, "Position");
+	glBindAttribLocation(m_programID, 1, "Color");
+	glBindAttribLocation(m_programID, 2, "heightScale");
+	glBindAttribLocation(m_programID, 3, "time");
+	glLinkProgram(m_programID);
+
+	//Error checking
+	int success = GL_FALSE;
+	glGetProgramiv(m_programID, GL_LINK_STATUS, &success);
+	if (success == GL_FALSE)
+	{
+		int infoLogLength = 0;
+		glGetShaderiv(m_programID, GL_INFO_LOG_LENGTH, &infoLogLength);
+		char* infoLog = new char[infoLogLength];
+
+		glGetShaderInfoLog(m_programID, infoLogLength, 0, infoLog);
+		printf("Error: Failed to link shader program!\n%s\n", infoLog);
+		delete[] infoLog;
+	}
+
+	glDeleteShader(fragShader);
+	glDeleteShader(vertShader);
+}
