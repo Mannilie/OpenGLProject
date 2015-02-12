@@ -1,4 +1,4 @@
-#include "RenderingGeometry.h"
+#include "Texturing.h"
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
@@ -9,7 +9,7 @@ void onWindowResize(GLFWwindow* window, int width, int height);
 
 int main()
 {
-	RenderingGeometry theApp;
+	Texturing theApp;
 	g_theApplication = &theApp;
 
 	theApp.SetDefault(1280, 720, "Manny's Project");

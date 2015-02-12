@@ -7,6 +7,7 @@
 #include "Gizmos.h"
 
 #include "Vertex.h"
+#include "Utility.h"
 
 bool RenderingGeometry::Startup()
 {
@@ -15,8 +16,11 @@ bool RenderingGeometry::Startup()
 		return false;
 	}
 
-	GenerateShader();
-	GenerateGrid(1024, 1024);
+	if (LoadShaders("./shaders/VertShader-RenderingGeo.glsl", "./shaders/FragShader-RenderingGeo.glsl", &m_programID) == false)
+	{
+		//return false;
+	}
+	GenerateGrid(10, 10);
 
 	Gizmos::create();
 
@@ -113,7 +117,7 @@ void RenderingGeometry::GenerateGrid(unsigned int a_rows, unsigned int a_cols)
 			vec4 position = vec4((float)col, 0, (float)row, 1);
 			vertexArray[col + row * (a_cols + 1)].position = position;
 
-			vec4 color = vec4(sinf((col / (float)(a_cols + 1)) * (row / (float)(a_rows + 1))));
+			vec4 color = vec4(sinf((row / (float)(a_rows + 1))), sinf((col / (float)(a_cols + 1))), 1.0f, 1.0f);
 			vertexArray[col + row * (a_cols + 1)].color = color;
 			//std::cout << "you" << std::endl;
 		}
@@ -166,66 +170,4 @@ void RenderingGeometry::GenerateGrid(unsigned int a_rows, unsigned int a_cols)
 
 	delete[] vertexArray;
 	delete[] indexArray;
-}
-
-void RenderingGeometry::GenerateShader()
-{
-	const char* vertSource ="#version 410\n 									"
-						   	"in vec4 Position; 									"
-							"in vec4 Color; 									"
-							"out vec4 outColor; 								"
-							"uniform mat4 projView; 							"
-							"uniform float time;								"
-							"uniform float heightScale;							"
-							"void main() 										"
-							"{ 													"
-							"	outColor = Color; 								"
-							"	vec4 P = Position;								"
-							"	P.y += sin( time + Position.x ) * heightScale;	"
-							"	gl_Position = projView * P; 					"
-							"}													";
-
-							
-	const char* fragSource ="#version 410\n				"
-						   	"in vec4 outColor; 			"
-							"out vec4 fragColor; 		"
-							"void main() 				"
-							"{ 							"
-							"	fragColor = outColor; 	"
-							"}							";
-
-	unsigned int vertShader = glCreateShader(GL_VERTEX_SHADER);
-	unsigned int fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	glShaderSource(vertShader, 1, &vertSource, 0);
-	glCompileShader(vertShader);
-
-	glShaderSource(fragShader, 1, &fragSource, 0);
-	glCompileShader(fragShader);
-
-	m_programID = glCreateProgram();
-	glAttachShader(m_programID, vertShader);
-	glAttachShader(m_programID, fragShader);
-	glBindAttribLocation(m_programID, 0, "Position");
-	glBindAttribLocation(m_programID, 1, "Color");
-	glBindAttribLocation(m_programID, 2, "heightScale");
-	glBindAttribLocation(m_programID, 3, "time");
-	glLinkProgram(m_programID);
-
-	//Error checking
-	int success = GL_FALSE;
-	glGetProgramiv(m_programID, GL_LINK_STATUS, &success);
-	if (success == GL_FALSE)
-	{
-		int infoLogLength = 0;
-		glGetShaderiv(m_programID, GL_INFO_LOG_LENGTH, &infoLogLength);
-		char* infoLog = new char[infoLogLength];
-
-		glGetShaderInfoLog(m_programID, infoLogLength, 0, infoLog);
-		printf("Error: Failed to link shader program!\n%s\n", infoLog);
-		delete[] infoLog;
-	}
-
-	glDeleteShader(fragShader);
-	glDeleteShader(vertShader);
 }

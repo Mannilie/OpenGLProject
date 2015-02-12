@@ -27,18 +27,18 @@ bool LoadShaders(char* a_vertShaderFile, char* a_fragShaderFile, GLuint* a_resul
 		char* vsSource = new char[vertFileLength];
 		char* fsSource = new char[fragFileLength];
 
-		fread(vsSource, 1, vertFileLength, vertFile);
-		fread(fsSource, 1, fragFileLength, fragFile);
+		vertFileLength = fread(vsSource, 1, vertFileLength, vertFile);
+		fragFileLength = fread(fsSource, 1, fragFileLength, fragFile);
 
 		loadSucceeded = true;
 
 		unsigned int vertShader = glCreateShader(GL_VERTEX_SHADER);
 		unsigned int fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-		glShaderSource(vertShader, 1, &vsSource, 0);
+		glShaderSource(vertShader, 1, &vsSource, &vertFileLength);
 		glCompileShader(vertShader);
 
-		glShaderSource(fragShader, 1, &fsSource, 0);
+		glShaderSource(fragShader, 1, &fsSource, &fragFileLength);
 		glCompileShader(fragShader);
 
 		*a_result = glCreateProgram();
