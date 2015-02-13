@@ -45,6 +45,9 @@ private:
 	float m_moveSpeed;
 	float m_fovSpeed;
 	vec3  m_up;
+
+	float m_yaw;
+	float m_pitch;
 public:
 	FlyCamera();
 	FlyCamera(float a_fieldOfView, float a_aspect, float a_speed);

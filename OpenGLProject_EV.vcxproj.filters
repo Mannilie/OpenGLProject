@@ -34,6 +34,21 @@
     <Filter Include="Source Files\Texturing">
       <UniqueIdentifier>{0c88fd20-1e93-404f-9619-b40a43827480}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Lighting">
+      <UniqueIdentifier>{633e3d53-b7c9-46cc-abcf-d403f7a7f099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lighting">
+      <UniqueIdentifier>{f32da0ea-cbcb-461a-8468-aaab0a8a19e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\shaders\Texturing">
+      <UniqueIdentifier>{19aa1ae7-d074-4a34-bb17-9948d6c0e616}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\shaders\RenderingGeometry">
+      <UniqueIdentifier>{b379dd7e-18ec-4f75-819e-7f9b1c64a3ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\shaders\Lighting">
+      <UniqueIdentifier>{c2a13694-c8c5-45a1-9d4d-4c5f00325317}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -72,6 +87,12 @@
     <ClInclude Include="src\Texturing.h">
       <Filter>Header Files\Texturing</Filter>
     </ClInclude>
+    <ClInclude Include="src\Lighting.h">
+      <Filter>Header Files\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -104,19 +125,31 @@
     <ClCompile Include="src\Texturing.cpp">
       <Filter>Source Files\Texturing</Filter>
     </ClCompile>
+    <ClCompile Include="src\Lighting.cpp">
+      <Filter>Source Files\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tiny_obj_loader.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\shaders\FragShader-RenderingGeo.glsl">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="data\shaders\VertShader-RenderingGeo.glsl">
-      <Filter>Resource Files\shaders</Filter>
+    <None Include="data\shaders\textured_fragment.glsl">
+      <Filter>Resource Files\shaders\Texturing</Filter>
     </None>
     <None Include="data\shaders\textured_vertex.glsl">
-      <Filter>Resource Files\shaders</Filter>
+      <Filter>Resource Files\shaders\Texturing</Filter>
     </None>
-    <None Include="data\shaders\textured_fragment.glsl">
-      <Filter>Resource Files\shaders</Filter>
+    <None Include="data\shaders\FragShader-RenderingGeo.glsl">
+      <Filter>Resource Files\shaders\RenderingGeometry</Filter>
+    </None>
+    <None Include="data\shaders\VertShader-RenderingGeo.glsl">
+      <Filter>Resource Files\shaders\RenderingGeometry</Filter>
+    </None>
+    <None Include="data\shaders\lighting_vertex.glsl">
+      <Filter>Resource Files\shaders\Lighting</Filter>
+    </None>
+    <None Include="data\shaders\lighting_fragment.glsl">
+      <Filter>Resource Files\shaders\Lighting</Filter>
     </None>
   </ItemGroup>
 </Project>

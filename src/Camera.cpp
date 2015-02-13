@@ -122,6 +122,8 @@ FlyCamera::FlyCamera()
 	: m_moveSpeed(60.0f)
 	, m_fovSpeed(10.0f)
 	, m_up(vec3(0, 1, 0))
+	, m_yaw(0)
+	, m_pitch(0)
 	, Camera(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0), 60.0f, 1280, 720, 0.1f, 1000.0f)
 {
 }
@@ -130,6 +132,8 @@ FlyCamera::FlyCamera(float a_fieldOfView, float a_aspect, float a_moveSpeed)
 	: Camera(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0), a_fieldOfView, a_aspect, 0.1f, 1000.0f)
 	, m_moveSpeed(a_moveSpeed)
 	, m_fovSpeed(10.0f)
+	, m_yaw(0)
+	, m_pitch(0)
 {
 }
 
@@ -193,16 +197,24 @@ void FlyCamera::update(float a_DeltaTime)
 		mouseX *= -m_sensitivity;
 		mouseY *= -m_sensitivity;
 
-		vec3 cameraRight = (vec3)m_world[0];
+		m_yaw += mouseX;
+		m_pitch += mouseY;
 
-		mat4 yaw = glm::rotate((float)mouseX, vec3(0, 1, 0));
-		mat4 pitch = glm::rotate((float)mouseY, cameraRight);
+		if (m_pitch >= glm::radians(90.f))
+		{
+			m_pitch = glm::radians(90.f);
+		}
+		if (m_pitch <= glm::radians(-90.f))
+		{
+			m_pitch = glm::radians(-90.f);
+		}
 
-		mat4 rot = yaw * pitch;
+		mat4 yaw = glm::rotate(m_yaw, vec3(0, 1, 0));
+		mat4 pitch = glm::rotate(m_pitch, vec3(1, 0, 0));
 
-		m_world[0] = rot * m_world[0];
-		m_world[1] = rot * m_world[1];
-		m_world[2] = rot * m_world[2];
+		mat4 transform = yaw * pitch;
+		transform[3] = m_world[3];
+		m_world = transform;
 	}
 	if (glfwGetMouseButton(curr_window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE && m_mouseDown == true)
 	{
@@ -219,6 +231,8 @@ void FlyCamera::update(float a_DeltaTime)
 	{
 		m_fieldOfView -= m_fovSpeed * a_DeltaTime;
 	}
+
+	m_aspect = m_windowWidth / m_windowHeight;
 
 	m_world[3][3] = 1;
 

@@ -16,7 +16,7 @@ bool RenderingGeometry::Startup()
 		return false;
 	}
 
-	if (LoadShaders("./shaders/VertShader-RenderingGeo.glsl", "./shaders/FragShader-RenderingGeo.glsl", &m_programID) == false)
+	if (loadShaders("./shaders/VertShader-RenderingGeo.glsl", "./shaders/FragShader-RenderingGeo.glsl", &m_programID) == false)
 	{
 		//return false;
 	}

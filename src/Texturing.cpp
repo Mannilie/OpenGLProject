@@ -3,7 +3,6 @@
 
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
-
 #include "Gizmos.h"
 
 #include "Vertex.h"
@@ -22,7 +21,7 @@ bool Texturing::Startup()
 	Gizmos::create();
 
 	loadTexture("./textures/crate.png");
-	LoadShaders("./shaders/textured_vertex.glsl", "./shaders/textured_fragment.glsl", &m_program);
+	loadShaders("./shaders/textured_vertex.glsl", "./shaders/textured_fragment.glsl", &m_program);
 	GenerateQuat(5.0f);
 
 	m_Camera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);

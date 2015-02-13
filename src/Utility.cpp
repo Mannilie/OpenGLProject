@@ -2,7 +2,7 @@
 #include <cstdio>
 #include "gl_core_4_4.h"
 
-bool LoadShaders(char* a_vertShaderFile, char* a_fragShaderFile, GLuint* a_result)
+bool loadShaders(char* a_vertShaderFile, char* a_fragShaderFile, GLuint* a_result)
 {
 	bool loadSucceeded = false;
 
@@ -44,8 +44,6 @@ bool LoadShaders(char* a_vertShaderFile, char* a_fragShaderFile, GLuint* a_resul
 		*a_result = glCreateProgram();
 		glAttachShader(*a_result, vertShader);
 		glAttachShader(*a_result, fragShader);
-		glBindAttribLocation(*a_result, 0, "Position");
-		glBindAttribLocation(*a_result, 1, "Color");
 		glLinkProgram(*a_result);
 
 		//Error checking

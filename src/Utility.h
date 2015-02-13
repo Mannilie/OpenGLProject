@@ -3,6 +3,6 @@
 
 typedef unsigned int GLuint;
 
-bool LoadShaders(char* a_vertShaderFile, char* a_fragShaderFile, GLuint* a_result);
+bool loadShaders(char* a_vertShaderFile, char* a_fragShaderFile, GLuint* a_result);
 
 #endif
