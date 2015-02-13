@@ -1,33 +1,34 @@
-#ifndef _LIGHTING_H_
-#define _LIGHTING_H_
+#ifndef _ADVANCEDTEXTURES_H_
+#define _ADVANCEDTEXTURES_H_
 
 #include "Application.h"
 #include "Camera.h"
-
-#include "tiny_obj_loader.h"
 #include "Vertex.h"
 
-class Lighting : public Application
+class AdvancedTextures : public Application
 {
 private:
 	unsigned int m_program;
 public:
 	FlyCamera m_flyCamera;
-	std::vector<OpenGLData> m_glData;
+	OpenGLData m_quad;
+	unsigned int m_diffuseTexture;
+	unsigned int m_normalTexture;
+	unsigned int m_specularTexture;
+
 	vec3 m_lightDir;
 	vec3 m_lightColor;
-	vec3 m_materialColor;
 	vec3 m_ambientLight;
 	float m_specularPower;
 
-	void createOpenGLBuffers(std::vector<tinyobj::shape_t>& a_shapes);
-	void cleanupOpenGLBuffers();
-	void reloadShader();
-
+	AdvancedTextures();
 	virtual bool Startup();
 	virtual void Shutdown();
 	virtual bool Update();
 	virtual void Draw();
+
+	void loadTextures();
+	void GenerateQuat(float a_size);
 };
 
 #endif

@@ -22,17 +22,17 @@ bool Lighting::Startup()
 
 	loadShaders("./shaders/lighting_vertex.glsl", "./shaders/lighting_fragment.glsl", &m_program);
 
-	m_FlyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
-	m_FlyCamera.m_fieldOfView = 60.0f;
-	m_FlyCamera.m_aspect = m_windowWidth / m_windowHeight;
-	m_FlyCamera.setMoveSpeed(10.0f);
-	m_FlyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
-	m_FlyCamera.setFOVSpeed(100.0f);
-	m_FlyCamera.m_sensitivity = 1.0f;
+	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
+	m_flyCamera.m_fieldOfView = 60.0f;
+	m_flyCamera.m_aspect = m_windowWidth / m_windowHeight;
+	m_flyCamera.setMoveSpeed(10.0f);
+	m_flyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
+	m_flyCamera.setFOVSpeed(100.0f);
+	m_flyCamera.m_sensitivity = 1.0f;
+
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
-
-	std::string err = tinyobj::LoadObj(shapes, materials, "./models/stanford/bunny.obj");
+	std::string err = tinyobj::LoadObj(shapes, materials, "./models/stanford/dragon.obj");
 
 	createOpenGLBuffers(shapes);
 
@@ -93,9 +93,9 @@ bool Lighting::Update()
 			i == 10 ? red : black);
 	}
 
-	m_FlyCamera.m_windowWidth = m_windowWidth;
-	m_FlyCamera.m_windowHeight = m_windowHeight;
-	m_FlyCamera.update(deltaTime);
+	m_flyCamera.m_windowWidth = m_windowWidth;
+	m_flyCamera.m_windowHeight = m_windowHeight;
+	m_flyCamera.update(deltaTime);
 
 	return true;
 }
@@ -108,7 +108,7 @@ void Lighting::Draw()
 	unsigned int projViewHandle = glGetUniformLocation(m_program, "projView");
 	if (projViewHandle >= 0)
 	{
-		glUniformMatrix4fv(projViewHandle, 1, GL_FALSE, (float*)&m_FlyCamera.m_projView);
+		glUniformMatrix4fv(projViewHandle, 1, GL_FALSE, (float*)&m_flyCamera.m_projView);
 		
 		int ambientUniform = 
 			glGetUniformLocation(m_program, "ambientLight");
@@ -129,7 +129,7 @@ void Lighting::Draw()
 		glUniform3fv(lightColorUniform, 1, (float*)&m_lightColor);
 		glUniform3fv(materialColorUniform, 1, (float*)&m_materialColor);
 
-		vec3 eyePos = m_FlyCamera.m_world[3].xyz;
+		vec3 eyePos = m_flyCamera.m_world[3].xyz;
 		glUniform3fv(eyePosUniform, 1, (float*)&eyePos);
 		glUniform1f(specularPowerUniform, m_specularPower);
 	}
@@ -140,7 +140,7 @@ void Lighting::Draw()
 		glDrawElements(GL_TRIANGLES, m_glData[shapeIndex].m_indexCount, GL_UNSIGNED_INT, 0);
 	}
 
-	Gizmos::draw(m_FlyCamera.m_projView);
+	Gizmos::draw(m_flyCamera.m_projView);
 
 	Application::Draw();
 }

@@ -49,6 +49,15 @@
     <Filter Include="Resource Files\shaders\Lighting">
       <UniqueIdentifier>{c2a13694-c8c5-45a1-9d4d-4c5f00325317}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AdvancedTextures">
+      <UniqueIdentifier>{89eeb584-a82d-4a57-9172-b73e042f5cbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AdvancedTextures">
+      <UniqueIdentifier>{d7c85af2-1840-445d-a080-64ae3e1edfa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\shaders\AdvancedTextures">
+      <UniqueIdentifier>{6121b261-57fe-4278-89e4-7da7835661b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -75,9 +84,6 @@
     <ClInclude Include="src\GLM_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Vertex.h">
-      <Filter>Header Files\RenderingGeometry</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -91,6 +97,12 @@
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="src\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AdvancedTextures.h">
+      <Filter>Header Files\AdvancedTextures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -131,6 +143,9 @@
     <ClCompile Include="src\tiny_obj_loader.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AdvancedTextures.cpp">
+      <Filter>Source Files\AdvancedTextures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\textured_fragment.glsl">
@@ -150,6 +165,12 @@
     </None>
     <None Include="data\shaders\lighting_fragment.glsl">
       <Filter>Resource Files\shaders\Lighting</Filter>
+    </None>
+    <None Include="data\shaders\normal_mapped_vertex.glsl">
+      <Filter>Resource Files\shaders\AdvancedTextures</Filter>
+    </None>
+    <None Include="data\shaders\normal_mapped_fragment.glsl">
+      <Filter>Resource Files\shaders\AdvancedTextures</Filter>
     </None>
   </ItemGroup>
 </Project>
