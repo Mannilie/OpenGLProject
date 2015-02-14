@@ -1,8 +1,7 @@
 #include "Texturing.h"
 #include "GLM_Header.h"
+#include "GL_Header.h"
 
-#include "gl_core_4_4.h"
-#include <GLFW\glfw3.h>
 #include "Gizmos.h"
 
 #include "Vertex.h"
@@ -10,9 +9,9 @@
 
 #include "stb_image.h"
 
-bool Texturing::Startup()
+bool Texturing::startup()
 {
-	if (Application::Startup() == false)
+	if (Application::startup() == false)
 	{
 		return false;
 	}
@@ -21,30 +20,30 @@ bool Texturing::Startup()
 
 	loadTexture("./textures/crate.png");
 	loadShaders("./shaders/textured_vertex.glsl", "./shaders/textured_fragment.glsl", &m_program);
-	GenerateQuat(5.0f);
+	generateQuat(5.0f);
 
-	m_Camera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
-	m_Camera.m_fieldOfView = 60.0f;
-	m_Camera.m_aspect = m_windowWidth / m_windowHeight;
-	m_Camera.setMoveSpeed(100.0f);
-	m_Camera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
-	m_Camera.setFOVSpeed(100.0f);
+	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
+	m_flyCamera.m_fieldOfView = 60.0f;
+	m_flyCamera.m_aspect = m_windowWidth / m_windowHeight;
+	m_flyCamera.setMoveSpeed(100.0f);
+	m_flyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
+	m_flyCamera.setFOVSpeed(100.0f);
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	return true;
 }
 
-void Texturing::Shutdown()
+void Texturing::shutdown()
 {
 
 
-	Application::Shutdown();
+	Application::shutdown();
 }
 
-bool Texturing::Update()
+bool Texturing::update()
 {
-	if (Application::Update() == false)
+	if (Application::update() == false)
 	{
 		return false;
 	}
@@ -68,14 +67,14 @@ bool Texturing::Update()
 			i == 10 ? red : black);
 	}
 
-	m_Camera.m_windowWidth = m_windowWidth;
-	m_Camera.m_windowHeight = m_windowHeight;
-	m_Camera.update(deltaTime);
+	m_flyCamera.m_windowWidth = m_windowWidth;
+	m_flyCamera.m_windowHeight = m_windowHeight;
+	m_flyCamera.update(deltaTime);
 
 	return true;
 }
 
-void Texturing::Draw()
+void Texturing::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -83,7 +82,7 @@ void Texturing::Draw()
 	unsigned int projViewHandle = glGetUniformLocation(m_program, "projView");
 	if (projViewHandle >= 0)
 	{
-		glUniformMatrix4fv(projViewHandle, 1, GL_FALSE, (float*)&m_Camera.m_projView);
+		glUniformMatrix4fv(projViewHandle, 1, GL_FALSE, (float*)&m_flyCamera.m_projView);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_texture);
@@ -96,9 +95,9 @@ void Texturing::Draw()
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-	Gizmos::draw(m_Camera.m_projView);
+	Gizmos::draw(m_flyCamera.m_projView);
 
-	Application::Draw();
+	Application::draw();
 }
 
 void Texturing::loadTexture(const char* a_filename)
@@ -120,7 +119,7 @@ void Texturing::loadTexture(const char* a_filename)
 	stbi_image_free(data);
 }
 
-void Texturing::GenerateQuat(float a_size)
+void Texturing::generateQuat(float a_size)
 {
 	VertexTexCoord vertexData[4];
 

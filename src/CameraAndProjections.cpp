@@ -1,16 +1,14 @@
 #include "CameraAndProjections.h"
-
-#include "gl_core_4_4.h"
-#include <GLFW\glfw3.h>
+#include "GL_Header.h"
 #include "Gizmos.h"
 
 CameraAndProjections::CameraAndProjections()
 {
 }
 
-bool CameraAndProjections::Startup()
+bool CameraAndProjections::startup()
 {
-	if (Application::Startup() == false)
+	if (Application::startup() == false)
 	{
 		return false;
 	}
@@ -18,12 +16,12 @@ bool CameraAndProjections::Startup()
 	Gizmos::create();
 	glfwSetTime(0.0f);
 
-	m_Camera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
-	m_Camera.m_fieldOfView = 60.0f;
-	m_Camera.m_aspect = m_windowWidth / m_windowHeight;
-	m_Camera.setMoveSpeed(100.0f);
-	m_Camera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
-	m_Camera.setFOVSpeed(100.0f);
+	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
+	m_flyCamera.m_fieldOfView = 60.0f;
+	m_flyCamera.m_aspect = m_windowWidth / m_windowHeight;
+	m_flyCamera.setMoveSpeed(100.0f);
+	m_flyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
+	m_flyCamera.setFOVSpeed(100.0f);
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -32,16 +30,16 @@ bool CameraAndProjections::Startup()
 
 
 
-void CameraAndProjections::Shutdown()
+void CameraAndProjections::shutdown()
 {
 	Gizmos::destroy();
 
-	Application::Shutdown();
+	Application::shutdown();
 }
 
-bool CameraAndProjections::Update()
+bool CameraAndProjections::update()
 {
-	if (Application::Update() == false)
+	if (Application::update() == false)
 	{
 		return false;
 	}
@@ -101,19 +99,19 @@ bool CameraAndProjections::Update()
 	//Gizmos::addAABB(vec3(0, 5, 1), vec3(1, 1, 1), blue);
 	//Gizmos::addTri(vec3(0, 1, 0), vec3(2, -1, 1), vec3(-3, -2, 4), green);
 
-	m_Camera.m_aspect = m_windowWidth / m_windowHeight;
+	m_flyCamera.m_aspect = m_windowWidth / m_windowHeight;
 
-	m_Camera.update(delta);
+	m_flyCamera.update(delta);
 
 	return true;
 }
 
-void CameraAndProjections::Draw()
+void CameraAndProjections::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	Gizmos::draw(m_Camera.getProjView());
+	Gizmos::draw(m_flyCamera.getProjView());
 
-	Application::Draw();
+	Application::draw();
 }
 

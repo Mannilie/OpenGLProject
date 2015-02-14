@@ -1,31 +1,25 @@
 #include "Application.h"
-
-#include "gl_core_4_4.h"
-#include <GLFW\glfw3.h>
+#include "GL_Header.h"
 
 #include <cstdio>
-
-void window_size_callback(GLFWwindow* window, int width, int height)
-{
-	printf("Window is resizing! %d.%d\n");
-}
 
 Application::Application() 
 	: m_windowWidth(0)
 	, m_windowHeight(0)
 	, m_appName("")
 {}
+
 Application::~Application(){}
 
 
-void Application::SetDefault(float a_windowWidth, float a_windowHeight, char* a_appName)
+void Application::setDefault(float a_windowWidth, float a_windowHeight, char* a_appName)
 { 
 	m_windowWidth = a_windowWidth;
 	m_windowHeight = a_windowHeight;
 	m_appName = a_appName;
 }
 
-bool Application::Startup()
+bool Application::startup()
 {
 	if (m_windowWidth == 0 || m_windowHeight == 0 || m_appName == "")
 	{
@@ -60,12 +54,16 @@ bool Application::Startup()
 
 	printf("successfully loaded OpenGL version %d.%d\n", major_version, minor_version);
 
-	glfwSetWindowSizeCallback(this->m_window, window_size_callback);
-
 	return true;
 }
 
-bool Application::Update()
+void Application::shutdown()
+{
+	glfwDestroyWindow(m_window);
+	glfwTerminate();
+}
+
+bool Application::update()
 {
 	if(glfwWindowShouldClose(m_window))
 	{
@@ -83,14 +81,8 @@ bool Application::Update()
 	return true;
 }
 
-void Application::Draw()
+void Application::draw()
 {
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
-}
-
-void Application::Shutdown()
-{
-	glfwDestroyWindow(m_window);
-	glfwTerminate();
 }

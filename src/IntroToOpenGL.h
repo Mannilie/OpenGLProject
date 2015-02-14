@@ -12,12 +12,12 @@ private:
 	float m_cameraZ;
 	float m_timer;
 public:
-	virtual bool Startup();
-	virtual bool Update();
-	virtual void Draw();
-	virtual void Shutdown();
+	virtual bool startup();
+	virtual bool update();
+	virtual void draw();
+	virtual void shutdown();
 
-	mat4 BuildOrbitMatrix(float local_rotation, float radius, float orbit_rotation);
+	mat4 buildOrbitMatrix(float local_rotation, float radius, float orbit_rotation);
 };
 
 

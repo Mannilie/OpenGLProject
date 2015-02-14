@@ -58,18 +58,21 @@
     <Filter Include="Resource Files\shaders\AdvancedTextures">
       <UniqueIdentifier>{6121b261-57fe-4278-89e4-7da7835661b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{c7a613eb-d92a-47f7-b1eb-506355bff1b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IntroToOpenGL">
+      <UniqueIdentifier>{a8421c9f-b5b0-4358-b074-816e2b886406}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IntroToOpenGL">
+      <UniqueIdentifier>{a1e3fe05-e966-480c-a17b-d55e6e6289da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{67d29028-f126-426a-829f-aa86e060602c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\gl_core_4_4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Gizmos.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IntroToOpenGL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\CameraAndProjections.h">
@@ -81,45 +84,48 @@
     <ClInclude Include="src\RenderingGeometry.h">
       <Filter>Header Files\RenderingGeometry</Filter>
     </ClInclude>
-    <ClInclude Include="src\GLM_Header.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Texturing.h">
       <Filter>Header Files\Texturing</Filter>
     </ClInclude>
     <ClInclude Include="src\Lighting.h">
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="src\tiny_obj_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\AdvancedTextures.h">
       <Filter>Header Files\AdvancedTextures</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utility.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
     <ClInclude Include="src\Vertex.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tiny_obj_loader.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb_image.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GLM_Header.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gl_core_4_4.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gizmos.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IntroToOpenGL.h">
+      <Filter>Header Files\IntroToOpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GL_Header.h">
+      <Filter>Header Files\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\gl_core_4_4.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Gizmos.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IntroToOpenGL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\CameraAndProjections.cpp">
@@ -131,20 +137,29 @@
     <ClCompile Include="src\RenderingGeometry.cpp">
       <Filter>Source Files\RenderingGeometry</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Texturing.cpp">
       <Filter>Source Files\Texturing</Filter>
     </ClCompile>
     <ClCompile Include="src\Lighting.cpp">
       <Filter>Source Files\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="src\tiny_obj_loader.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\AdvancedTextures.cpp">
       <Filter>Source Files\AdvancedTextures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gl_core_4_4.c">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gizmos.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tiny_obj_loader.cc">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IntroToOpenGL.cpp">
+      <Filter>Source Files\IntroToOpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@
 class RenderingGeometry : public Application
 {
 private:
-	FlyCamera m_Camera;
+	FlyCamera m_flyCamera;
 	unsigned int m_programID;
 	unsigned int m_indexCount;
 	unsigned int m_VAO;
@@ -18,12 +18,12 @@ private:
 	float m_heightScale;
 	float m_time;
 public:
-	virtual bool Startup();
-	virtual void Shutdown();
-	virtual bool Update();
-	virtual void Draw();
+	virtual bool startup();
+	virtual void shutdown();
+	virtual bool update();
+	virtual void draw();
 
-	void GenerateGrid(unsigned int a_rows, unsigned int a_cols);
+	void generateGrid(unsigned int a_rows, unsigned int a_cols);
 };
 
 #endif

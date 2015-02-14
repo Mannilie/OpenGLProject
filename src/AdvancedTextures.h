@@ -22,13 +22,13 @@ public:
 	float m_specularPower;
 
 	AdvancedTextures();
-	virtual bool Startup();
-	virtual void Shutdown();
-	virtual bool Update();
-	virtual void Draw();
+	virtual bool startup();
+	virtual void shutdown();
+	virtual bool update();
+	virtual void draw();
 
 	void loadTextures();
-	void GenerateQuat(float a_size);
+	void generateQuat(float a_size);
 };
 
 #endif

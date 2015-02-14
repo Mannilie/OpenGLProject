@@ -1,8 +1,7 @@
 #include "Lighting.h"
 
-#include "gl_core_4_4.h"
-#include <GLFW\glfw3.h>
 #include "GLM_Header.h"
+#include "GL_Header.h"
 
 #include "Gizmos.h"
 
@@ -11,9 +10,9 @@
 
 #include "stb_image.h"
 
-bool Lighting::Startup()
+bool Lighting::startup()
 {
-	if (Application::Startup() == false)
+	if (Application::startup() == false)
 	{
 		return false;
 	}
@@ -32,7 +31,7 @@ bool Lighting::Startup()
 
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
-	std::string err = tinyobj::LoadObj(shapes, materials, "./models/stanford/dragon.obj");
+	std::string err = tinyobj::LoadObj(shapes, materials, "./models/stanford/bunny.obj");
 
 	createOpenGLBuffers(shapes);
 
@@ -55,16 +54,16 @@ void Lighting::reloadShader()
 	loadShaders("./shaders/lighting_vertex.glsl", "./shaders/lighting_fragment.glsl", &m_program);
 }
 
-void Lighting::Shutdown()
+void Lighting::shutdown()
 {
 	cleanupOpenGLBuffers();
 
-	Application::Shutdown();
+	Application::shutdown();
 }
 
-bool Lighting::Update()
+bool Lighting::update()
 {
-	if (Application::Update() == false)
+	if (Application::update() == false)
 	{
 		return false;
 	}
@@ -100,7 +99,7 @@ bool Lighting::Update()
 	return true;
 }
 
-void Lighting::Draw()
+void Lighting::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -136,13 +135,16 @@ void Lighting::Draw()
 
 	for (unsigned int shapeIndex = 0; shapeIndex < m_glData.size(); ++shapeIndex)
 	{
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 		glBindVertexArray(m_glData[shapeIndex].m_VAO);
 		glDrawElements(GL_TRIANGLES, m_glData[shapeIndex].m_indexCount, GL_UNSIGNED_INT, 0);
 	}
 
 	Gizmos::draw(m_flyCamera.m_projView);
 
-	Application::Draw();
+	Application::draw();
 }
 
 void Lighting::createOpenGLBuffers(std::vector<tinyobj::shape_t>& a_shapes)

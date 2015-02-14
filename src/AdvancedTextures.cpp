@@ -1,8 +1,7 @@
 #include "AdvancedTextures.h"
 #include "GLM_Header.h"
+#include "GL_Header.h"
 
-#include "gl_core_4_4.h"
-#include <GLFW\glfw3.h>
 #include "Gizmos.h"
 
 #include "Vertex.h"
@@ -15,9 +14,9 @@ AdvancedTextures::AdvancedTextures()
 {
 }
 
-bool AdvancedTextures::Startup()
+bool AdvancedTextures::startup()
 {
-	if (Application::Startup() == false)
+	if (Application::startup() == false)
 	{
 		return false;
 	}
@@ -26,7 +25,7 @@ bool AdvancedTextures::Startup()
 
 	loadTextures();
 	loadShaders("./shaders/normal_mapped_vertex.glsl", "./shaders/normal_mapped_fragment.glsl", &m_program);
-	GenerateQuat(5.0f);
+	generateQuat(5.0f);
 
 	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
 	m_flyCamera.m_fieldOfView = 60.0f;
@@ -45,16 +44,16 @@ bool AdvancedTextures::Startup()
 	return true;
 }
 
-void AdvancedTextures::Shutdown()
+void AdvancedTextures::shutdown()
 {
 
 
-	Application::Shutdown();
+	Application::shutdown();
 }
 
-bool AdvancedTextures::Update()
+bool AdvancedTextures::update()
 {
-	if (Application::Update() == false)
+	if (Application::update() == false)
 	{
 		return false;
 	}
@@ -86,7 +85,7 @@ bool AdvancedTextures::Update()
 	return true;
 }
 
-void AdvancedTextures::Draw()
+void AdvancedTextures::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -139,7 +138,7 @@ void AdvancedTextures::Draw()
 
 	Gizmos::draw(m_flyCamera.m_projView);
 
-	Application::Draw();
+	Application::draw();
 }
 
 void AdvancedTextures::loadTextures()
@@ -189,7 +188,7 @@ void AdvancedTextures::loadTextures()
 	stbi_image_free(data);
 }
 
-void AdvancedTextures::GenerateQuat(float a_size)
+void AdvancedTextures::generateQuat(float a_size)
 {
 	VertexNormal vertexData[4];
 

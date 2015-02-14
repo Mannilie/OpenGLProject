@@ -1,17 +1,15 @@
 #include "RenderingGeometry.h"
 #include "GLM_Header.h"
-
-#include "gl_core_4_4.h"
-#include <GLFW\glfw3.h>
+#include "GL_Header.h"
 
 #include "Gizmos.h"
 
 #include "Vertex.h"
 #include "Utility.h"
 
-bool RenderingGeometry::Startup()
+bool RenderingGeometry::startup()
 {
-	if (Application::Startup() == false)
+	if (Application::startup() == false)
 	{
 		return false;
 	}
@@ -20,16 +18,16 @@ bool RenderingGeometry::Startup()
 	{
 		//return false;
 	}
-	GenerateGrid(10, 10);
+	generateGrid(10, 10);
 
 	Gizmos::create();
 
-	m_Camera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
-	m_Camera.m_fieldOfView = 60.0f;
-	m_Camera.m_aspect = m_windowWidth / m_windowHeight;
-	m_Camera.setMoveSpeed(100.0f);
-	m_Camera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
-	m_Camera.setFOVSpeed(100.0f);
+	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
+	m_flyCamera.m_fieldOfView = 60.0f;
+	m_flyCamera.m_aspect = m_windowWidth / m_windowHeight;
+	m_flyCamera.setMoveSpeed(100.0f);
+	m_flyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
+	m_flyCamera.setFOVSpeed(100.0f);
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -40,16 +38,16 @@ bool RenderingGeometry::Startup()
 	return true;
 }
 
-void RenderingGeometry::Shutdown()
+void RenderingGeometry::shutdown()
 {
 
 
-	Application::Shutdown();
+	Application::shutdown();
 }
 
-bool RenderingGeometry::Update()
+bool RenderingGeometry::update()
 {
-	if (Application::Update() == false)
+	if (Application::update() == false)
 	{
 		return false;
 	}
@@ -75,14 +73,14 @@ bool RenderingGeometry::Update()
 
 	m_time += m_waveSpeed * deltaTime;
 
-	m_Camera.m_windowWidth = m_windowWidth;
-	m_Camera.m_windowHeight = m_windowHeight;
-	m_Camera.update(deltaTime);
+	m_flyCamera.m_windowWidth = m_windowWidth;
+	m_flyCamera.m_windowHeight = m_windowHeight;
+	m_flyCamera.update(deltaTime);
 
 	return true;
 }
 
-void RenderingGeometry::Draw()
+void RenderingGeometry::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindVertexArray(m_VAO);
@@ -94,19 +92,19 @@ void RenderingGeometry::Draw()
 	unsigned int heightScaleHandle = glGetUniformLocation(m_programID, "heightScale");
 	if (projViewHandle >= 0)
 	{
-		glUniformMatrix4fv(projViewHandle, 1, GL_FALSE, (float*)&m_Camera.m_projView);
+		glUniformMatrix4fv(projViewHandle, 1, GL_FALSE, (float*)&m_flyCamera.m_projView);
 		glUniform1f(timeHandle, m_time);
 		glUniform1f(heightScaleHandle, m_heightScale);
 	}
 
 	glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
 
-	Gizmos::draw(m_Camera.m_projView);
+	Gizmos::draw(m_flyCamera.m_projView);
 
-	Application::Draw();
+	Application::draw();
 }
 
-void RenderingGeometry::GenerateGrid(unsigned int a_rows, unsigned int a_cols)
+void RenderingGeometry::generateGrid(unsigned int a_rows, unsigned int a_cols)
 {
 	//Sets up Vertexes
 	Vertex* vertexArray = new Vertex[(a_rows + 1) * (a_cols + 1)];

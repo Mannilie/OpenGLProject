@@ -83,6 +83,7 @@
     <ClInclude Include="src\Gizmos.h" />
     <ClInclude Include="src\GLM_Header.h" />
     <ClInclude Include="src\gl_core_4_4.h" />
+    <ClInclude Include="src\GL_Header.h" />
     <ClInclude Include="src\IntroToOpenGL.h" />
     <ClInclude Include="src\Lighting.h" />
     <ClInclude Include="src\RenderingGeometry.h" />

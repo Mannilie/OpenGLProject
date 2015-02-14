@@ -9,19 +9,19 @@ class Application
 {
 protected:
 	char* m_appName;
-	float m_windowWidth;
-	float m_windowHeight;
 public:
 	GLFWwindow* m_window;
+	float m_windowWidth;
+	float m_windowHeight;
 
 	Application();
 	virtual ~Application();
 
-	void SetDefault(float a_windowWidth, float a_windowHeight, char* a_appName);
-	virtual bool Startup();
-	virtual void Shutdown();
-	virtual bool Update();
-	virtual void Draw();
+	void setDefault(float a_windowWidth, float a_windowHeight, char* a_appName);
+	virtual bool startup();
+	virtual void shutdown();
+	virtual bool update();
+	virtual void draw();
 };
 
 #endif //_APPLICATION_H_

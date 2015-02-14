@@ -7,13 +7,13 @@
 class CameraAndProjections : public Application
 {
 private:
-	FlyCamera m_Camera;
+	FlyCamera m_flyCamera;
 public:
 	CameraAndProjections();
-	virtual bool Startup();
-	virtual bool Update();
-	virtual void Draw();
-	virtual void Shutdown();
+	virtual bool startup();
+	virtual bool update();
+	virtual void draw();
+	virtual void shutdown();
 };
 
 

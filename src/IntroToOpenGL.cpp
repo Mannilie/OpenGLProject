@@ -1,12 +1,10 @@
 #include "IntroToOpenGL.h"
-
-#include "gl_core_4_4.h"
-#include <GLFW\glfw3.h>
+#include "GL_Header.h"
 #include "Gizmos.h"
 
-bool IntroToOpenGL::Startup()
+bool IntroToOpenGL::startup()
 {
-	if (Application::Startup() == false) //Checks if the application failed to start up
+	if (Application::startup() == false) //Checks if the application failed to start up
 	{
 		return false;
 	}
@@ -23,15 +21,15 @@ bool IntroToOpenGL::Startup()
 	return true;
 }
 
-void IntroToOpenGL::Shutdown()
+void IntroToOpenGL::shutdown()
 {
 	Gizmos::destroy();
-	Application::Shutdown();
+	Application::shutdown();
 }
 
-bool IntroToOpenGL::Update()
+bool IntroToOpenGL::update()
 {
-	if (Application::Update() == false)
+	if (Application::update() == false)
 	{
 		return false;
 	}
@@ -71,12 +69,12 @@ bool IntroToOpenGL::Update()
 			i == 10 ? red : black);
 	}
 
-	mat4 sun_transform = BuildOrbitMatrix(m_timer, 0, 0);
+	mat4 sun_transform = buildOrbitMatrix(m_timer, 0, 0);
 
-	mat4 planet_1 = sun_transform * BuildOrbitMatrix(m_timer * 5, 5, m_timer * 0.5f);
-	mat4 planet_2 = sun_transform * BuildOrbitMatrix(m_timer * 3, 3.5f, m_timer * 1.5f);
-	mat4 planet_3 = sun_transform * BuildOrbitMatrix(m_timer * 2, 6, m_timer * 0.25f);
-	mat4 planet_4 = sun_transform * BuildOrbitMatrix(m_timer * 15, 2, m_timer * 5.0f);
+	mat4 planet_1 = sun_transform * buildOrbitMatrix(m_timer * 5, 5, m_timer * 0.5f);
+	mat4 planet_2 = sun_transform * buildOrbitMatrix(m_timer * 3, 3.5f, m_timer * 1.5f);
+	mat4 planet_3 = sun_transform * buildOrbitMatrix(m_timer * 2, 6, m_timer * 0.25f);
+	mat4 planet_4 = sun_transform * buildOrbitMatrix(m_timer * 15, 2, m_timer * 5.0f);
 
 	//Gizmos::addSphere(sun_transform[3].xyz, 2.0f, 20, 20, red, &sun_transform);
 
@@ -103,14 +101,14 @@ bool IntroToOpenGL::Update()
 	return true;
 }
 
-void IntroToOpenGL::Draw()
+void IntroToOpenGL::draw()
 {
 	Gizmos::draw(m_projection, m_view);
 
-	Application::Draw();
+	Application::draw();
 }
 
-mat4 IntroToOpenGL::BuildOrbitMatrix(float local_rotation, float radius, float orbit_rotation)
+mat4 IntroToOpenGL::buildOrbitMatrix(float local_rotation, float radius, float orbit_rotation)
 {
 	mat4 result = glm::rotate(orbit_rotation, vec3(0, 1, 0)) *
 		glm::translate(vec3(radius, 0, 0)) *

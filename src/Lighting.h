@@ -24,10 +24,10 @@ public:
 	void cleanupOpenGLBuffers();
 	void reloadShader();
 
-	virtual bool Startup();
-	virtual void Shutdown();
-	virtual bool Update();
-	virtual void Draw();
+	virtual bool startup();
+	virtual void shutdown();
+	virtual bool update();
+	virtual void draw();
 };
 
 #endif

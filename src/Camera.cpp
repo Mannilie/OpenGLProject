@@ -1,7 +1,7 @@
 #include "Camera.h"
+#include "GL_Header.h"
 
-#include "gl_core_4_4.h"
-#include <GLFW\glfw3.h>
+#include "Application.h"
 
 //Camera - Public:
 Camera::Camera()
@@ -147,6 +147,10 @@ void FlyCamera::update(float a_DeltaTime)
 	{
 		m_aspect = 1280.0f / 720.0f;
 	}
+	else
+	{
+		m_aspect = m_windowWidth / m_windowHeight;
+	}
 
 	GLFWwindow* curr_window = glfwGetCurrentContext();
 
@@ -231,8 +235,6 @@ void FlyCamera::update(float a_DeltaTime)
 	{
 		m_fieldOfView -= m_fovSpeed * a_DeltaTime;
 	}
-
-	m_aspect = m_windowWidth / m_windowHeight;
 
 	m_world[3][3] = 1;
 

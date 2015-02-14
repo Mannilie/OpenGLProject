@@ -1,4 +1,4 @@
-#include "AdvancedTextures.h"
+#include "Lighting.h"
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
@@ -9,29 +9,29 @@ void onWindowResize(GLFWwindow* window, int width, int height);
 
 int main()
 {
-	AdvancedTextures theApp;
+	Lighting theApp;
 	g_theApplication = &theApp;
-	theApp.SetDefault(1280, 720, "Manny's Project");
-	if (theApp.Startup() == false) //Checks for error messages (< 0)
+	theApp.setDefault(1280, 720, "Manny's Project");
+	if (theApp.startup() == false) //Checks for error messages (< 0)
 	{
 		return -1;
 	}
 	glfwSetWindowSizeCallback(theApp.m_window, onWindowResize);
-	while (theApp.Update() == true)
+	while (theApp.update() == true)
 	{
-		theApp.Draw();
+		theApp.draw();
 	}
-	theApp.Shutdown();
+	theApp.shutdown();
 	return 0;
 }
 
 bool runApp()
 {
-	if (g_theApplication->Update() == false)
+	if (g_theApplication->update() == false)
 	{
 		return false;
 	}
-	g_theApplication->Draw();
+	g_theApplication->draw();
 	return true;
 }
 
