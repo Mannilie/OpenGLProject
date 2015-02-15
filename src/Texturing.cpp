@@ -31,6 +31,7 @@ bool Texturing::startup()
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
+
 	return true;
 }
 

@@ -1,6 +1,9 @@
 #include "Utility.h"
 #include <cstdio>
+#include <iostream>
 #include "gl_core_4_4.h"
+
+#include <vector>
 
 bool loadShaders(char* a_vertShaderFile, char* a_fragShaderFile, GLuint* a_result)
 {
@@ -46,21 +49,7 @@ bool loadShaders(char* a_vertShaderFile, char* a_fragShaderFile, GLuint* a_resul
 		glAttachShader(*a_result, fragShader);
 		glLinkProgram(*a_result);
 
-		//Error checking
-		int success = GL_FALSE;
-		glGetProgramiv(*a_result, GL_LINK_STATUS, &success);
-		if (success == GL_FALSE)
-		{
-			int infoLogLength = 0;
-			glGetShaderiv(*a_result, GL_INFO_LOG_LENGTH, &infoLogLength);
-			char* infoLog = new char[infoLogLength];
-
-			glGetShaderInfoLog(*a_result, infoLogLength, 0, infoLog);
-			printf("Error: Failed to link shader program!\n%s\n", infoLog);
-			delete[] infoLog;
-
-			loadSucceeded = false;
-		}
+		checkProgramError(*a_result);
 
 		glDeleteShader(fragShader);
 		glDeleteShader(vertShader);
@@ -69,4 +58,30 @@ bool loadShaders(char* a_vertShaderFile, char* a_fragShaderFile, GLuint* a_resul
 		delete[] vsSource;
 	}
 	return loadSucceeded;
+}
+
+bool checkProgramError(unsigned int a_program)
+{
+	//Error checking
+	int success = GL_FALSE;
+	glGetProgramiv(a_program, GL_LINK_STATUS, &success);
+	if (success == GL_FALSE)
+	{
+		int infoLogLength = 0;
+		glGetProgramiv(a_program, GL_INFO_LOG_LENGTH, &infoLogLength);
+		if (infoLogLength <= 0)
+		{
+			return false;
+		}
+		std::vector<GLchar> infoLog(infoLogLength);
+		glGetProgramInfoLog(a_program, infoLogLength, &infoLogLength, &infoLog[0]);
+		std::cout << "Error: Failed to link shader program!" << std::endl;
+		for (unsigned int i = 0; i < infoLog.size(); ++i)
+		{
+			std::cout << infoLog[i];
+		}
+		std::cout << std::endl;
+		return false;
+	}
+	return true;
 }

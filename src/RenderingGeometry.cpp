@@ -14,11 +14,8 @@ bool RenderingGeometry::startup()
 		return false;
 	}
 
-	if (loadShaders("./shaders/VertShader-RenderingGeo.glsl", "./shaders/FragShader-RenderingGeo.glsl", &m_programID) == false)
-	{
-		//return false;
-	}
-	generateGrid(10, 10);
+	loadShaders("./shaders/VertShader-RenderingGeo.glsl", "./shaders/FragShader-RenderingGeo.glsl", &m_programID);
+	generateGrid(100, 100);
 
 	Gizmos::create();
 
@@ -51,9 +48,6 @@ bool RenderingGeometry::update()
 	{
 		return false;
 	}
-
-	float deltaTime = (float)glfwGetTime();
-	glfwSetTime(0.0f);
 
 	Gizmos::addTransform(mat4(1));
 

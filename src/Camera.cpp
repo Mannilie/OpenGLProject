@@ -178,7 +178,7 @@ void FlyCamera::update(float a_DeltaTime)
 
 	static double prevMouseX = 0, prevMouseY = 0;
 
-	if (glfwGetMouseButton(curr_window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS && m_mouseDown == false)
+	if (glfwGetMouseButton(curr_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && m_mouseDown == false)
 	{
 		m_mouseDown = true;
 		glfwGetCursorPos(curr_window, &prevMouseX, &prevMouseY);
@@ -220,7 +220,7 @@ void FlyCamera::update(float a_DeltaTime)
 		transform[3] = m_world[3];
 		m_world = transform;
 	}
-	if (glfwGetMouseButton(curr_window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE && m_mouseDown == true)
+	if (glfwGetMouseButton(curr_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && m_mouseDown == true)
 	{
 		m_mouseDown = false;
 		glfwSetInputMode(curr_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

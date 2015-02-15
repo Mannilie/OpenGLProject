@@ -3,6 +3,8 @@
 
 #include <cstdio>
 
+#include "GUI.h"
+
 Application::Application() 
 	: m_windowWidth(0)
 	, m_windowHeight(0)
@@ -10,7 +12,6 @@ Application::Application()
 {}
 
 Application::~Application(){}
-
 
 void Application::setDefault(float a_windowWidth, float a_windowHeight, char* a_appName)
 { 
@@ -54,11 +55,15 @@ bool Application::startup()
 
 	printf("successfully loaded OpenGL version %d.%d\n", major_version, minor_version);
 
+	GUI::create();
+
 	return true;
 }
 
 void Application::shutdown()
 {
+	GUI::destroy();
+
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
 }
@@ -69,20 +74,25 @@ bool Application::update()
 	{
 		return false;
 	}
+	deltaTime = (float)glfwGetTime();
+	glfwSetTime(0.0f);
+
+	GUI::update(deltaTime);
 
 	int width, height;
 	glfwGetWindowSize(m_window, &width, &height);
 	glfwGetFramebufferSize(m_window, &width, &height);
-	glViewport(0, 0, m_windowWidth, m_windowHeight);
+	glViewport(0, 0, (int)m_windowWidth, (int)m_windowHeight);
 
 	m_windowWidth = (float)width;
 	m_windowHeight = (float)height;
-
 	return true;
 }
 
 void Application::draw()
 {
+	GUI::draw();
+
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
 }

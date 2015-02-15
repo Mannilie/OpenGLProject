@@ -120,6 +120,9 @@
     <ClInclude Include="src\GL_Header.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -160,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="src\IntroToOpenGL.cpp">
       <Filter>Source Files\IntroToOpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

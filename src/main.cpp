@@ -1,4 +1,4 @@
-#include "Lighting.h"
+#include "RenderingGeometry.h"
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
@@ -9,7 +9,7 @@ void onWindowResize(GLFWwindow* window, int width, int height);
 
 int main()
 {
-	Lighting theApp;
+	RenderingGeometry theApp;
 	g_theApplication = &theApp;
 	theApp.setDefault(1280, 720, "Manny's Project");
 	if (theApp.startup() == false) //Checks for error messages (< 0)

@@ -3,16 +3,20 @@
 
 #include "GLM_Header.h"
 
+class GUI;
+
 struct GLFWwindow;
 
 class Application
 {
 protected:
 	char* m_appName;
-public:
-	GLFWwindow* m_window;
 	float m_windowWidth;
 	float m_windowHeight;
+	float deltaTime;
+public:
+	GUI* m_gui;
+	GLFWwindow* m_window;
 
 	Application();
 	virtual ~Application();
