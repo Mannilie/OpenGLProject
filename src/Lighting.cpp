@@ -17,6 +17,10 @@ bool Lighting::startup()
 		return false;
 	}
 
+	//GUI:
+	GUI::createNewBar("Lighting");
+
+
 	Gizmos::create();
 
 	loadShaders("./shaders/lighting_vertex.glsl", "./shaders/lighting_fragment.glsl", &m_program);

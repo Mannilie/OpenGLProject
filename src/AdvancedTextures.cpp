@@ -21,6 +21,14 @@ bool AdvancedTextures::startup()
 		return false;
 	}
 
+	//GUI:
+	GUI::createNewBar("Advanced textures");
+	TwAddVarRW(GUI::getBar("Advanced textures"), "Light Direction", TW_TYPE_DIR3F, &m_lightDir, "group=Light");
+	TwAddVarRW(GUI::getBar("Advanced textures"), "Light Color", TW_TYPE_COLOR4F, &m_lightColor, "group=Light");
+	TwAddVarRW(GUI::getBar("Advanced textures"), "Spec Power", TW_TYPE_FLOAT, &m_specularPower, "group=Light min=0.1 max=100 step=0.5");
+	
+	//TwAddVarRW(GUI::getBar("Advanced textures"), "Spec Power", TW_TYPE_FLOAT, &m_specularPower, "group=Light min=0.1 max=100 step=0.5");
+	
 	Gizmos::create();
 
 	loadTextures();
@@ -30,7 +38,7 @@ bool AdvancedTextures::startup()
 	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
 	m_flyCamera.m_fieldOfView = 60.0f;
 	m_flyCamera.m_aspect = m_windowWidth / m_windowHeight;
-	m_flyCamera.setMoveSpeed(10.0f);
+	m_flyCamera.setMoveSpeed(100.0f);
 	m_flyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
 	m_flyCamera.setFOVSpeed(100.0f);
 
@@ -46,8 +54,6 @@ bool AdvancedTextures::startup()
 
 void AdvancedTextures::shutdown()
 {
-
-
 	Application::shutdown();
 }
 
@@ -57,9 +63,6 @@ bool AdvancedTextures::update()
 	{
 		return false;
 	}
-
-	float deltaTime = (float)glfwGetTime();
-	glfwSetTime(0.0f);
 
 	Gizmos::addTransform(mat4(1));
 
@@ -77,11 +80,9 @@ bool AdvancedTextures::update()
 			i == 10 ? red : black);
 	}
 
-	m_lightDir = (glm::rotate(deltaTime, vec3(0, 1, 0)) * vec4(m_lightDir, 0)).xyz;
-
 	m_flyCamera.m_windowWidth = m_windowWidth;
 	m_flyCamera.m_windowHeight = m_windowHeight;
-	m_flyCamera.update(deltaTime);
+	m_flyCamera.update(m_deltaTime);
 	return true;
 }
 

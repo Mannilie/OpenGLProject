@@ -15,13 +15,16 @@ private:
 	unsigned int m_IBO;
 
 	unsigned int m_texture;
+
+	float m_time;
+	float m_waveSpeed;
 public:
 	virtual bool startup();
 	virtual void shutdown();
 	virtual bool update();
 	virtual void draw();
 
-	void loadTexture(const char* a_filename);
+	bool loadTexture(const char* a_filename);
 	void generateQuat(float a_size);
 };
 

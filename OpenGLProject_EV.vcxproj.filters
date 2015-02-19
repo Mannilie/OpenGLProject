@@ -70,6 +70,12 @@
     <Filter Include="Header Files\Utilities">
       <UniqueIdentifier>{67d29028-f126-426a-829f-aa86e060602c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Quaternions">
+      <UniqueIdentifier>{3372d745-5298-4c98-8e2b-0f4d039e94a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Quaternions">
+      <UniqueIdentifier>{16e272b8-e05e-4ab5-8bdd-4acd0ba999a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h">
@@ -123,6 +129,9 @@
     <ClInclude Include="src\GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Quaternions.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -167,6 +176,9 @@
     <ClCompile Include="src\GUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Quaternions.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\textured_fragment.glsl">
@@ -174,12 +186,6 @@
     </None>
     <None Include="data\shaders\textured_vertex.glsl">
       <Filter>Resource Files\shaders\Texturing</Filter>
-    </None>
-    <None Include="data\shaders\FragShader-RenderingGeo.glsl">
-      <Filter>Resource Files\shaders\RenderingGeometry</Filter>
-    </None>
-    <None Include="data\shaders\VertShader-RenderingGeo.glsl">
-      <Filter>Resource Files\shaders\RenderingGeometry</Filter>
     </None>
     <None Include="data\shaders\lighting_vertex.glsl">
       <Filter>Resource Files\shaders\Lighting</Filter>
@@ -192,6 +198,12 @@
     </None>
     <None Include="data\shaders\normal_mapped_fragment.glsl">
       <Filter>Resource Files\shaders\AdvancedTextures</Filter>
+    </None>
+    <None Include="data\shaders\rendergeometry_fragment.glsl">
+      <Filter>Resource Files\shaders\RenderingGeometry</Filter>
+    </None>
+    <None Include="data\shaders\rendergeometry_vertex.glsl">
+      <Filter>Resource Files\shaders\RenderingGeometry</Filter>
     </None>
   </ItemGroup>
 </Project>

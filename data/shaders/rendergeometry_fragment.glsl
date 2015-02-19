@@ -1,8 +1,11 @@
 #version 410
-in vec4 outColor; 		
+in vec4 outColor;
+		
 out vec4 fragColor; 
 	
 in float fragTime;
+
+uniform sampler2D theTexture;
 
 void main() 			
 { 						

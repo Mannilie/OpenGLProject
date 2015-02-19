@@ -15,13 +15,21 @@ private:
 	unsigned int m_IBO;
 
 	float m_waveSpeed;
-	float m_heightScale;
+
+	float m_height;
 	float m_time;
+
+	unsigned int m_texture;
+
+	bool m_wireframe;
 public:
 	virtual bool startup();
 	virtual void shutdown();
 	virtual bool update();
 	virtual void draw();
+	
+
+	bool loadTexture(const char* a_filename);
 
 	void generateGrid(unsigned int a_rows, unsigned int a_cols);
 };

@@ -3,7 +3,7 @@
 
 #include "GLM_Header.h"
 
-class GUI;
+#include "GUI.h"
 
 struct GLFWwindow;
 
@@ -13,15 +13,15 @@ protected:
 	char* m_appName;
 	float m_windowWidth;
 	float m_windowHeight;
-	float deltaTime;
+	float m_deltaTime;
+	bool m_debugging;
 public:
-	GUI* m_gui;
 	GLFWwindow* m_window;
 
 	Application();
 	virtual ~Application();
 
-	void setDefault(float a_windowWidth, float a_windowHeight, char* a_appName);
+	void setDefault(float a_windowWidth, float a_windowHeight, char* a_appName, bool m_debugging = false);
 	virtual bool startup();
 	virtual void shutdown();
 	virtual bool update();

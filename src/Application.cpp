@@ -1,9 +1,6 @@
 #include "Application.h"
 #include "GL_Header.h"
-
 #include <cstdio>
-
-#include "GUI.h"
 
 Application::Application() 
 	: m_windowWidth(0)
@@ -13,11 +10,12 @@ Application::Application()
 
 Application::~Application(){}
 
-void Application::setDefault(float a_windowWidth, float a_windowHeight, char* a_appName)
+void Application::setDefault(float a_windowWidth, float a_windowHeight, char* a_appName, bool a_debugging)
 { 
 	m_windowWidth = a_windowWidth;
 	m_windowHeight = a_windowHeight;
 	m_appName = a_appName;
+	m_debugging = a_debugging;
 }
 
 bool Application::startup()
@@ -55,7 +53,10 @@ bool Application::startup()
 
 	printf("successfully loaded OpenGL version %d.%d\n", major_version, minor_version);
 
-	GUI::create();
+	if (m_debugging) //Enable debugging
+	{
+		GUI::create();
+	}
 
 	return true;
 }
@@ -74,10 +75,10 @@ bool Application::update()
 	{
 		return false;
 	}
-	deltaTime = (float)glfwGetTime();
+	m_deltaTime = (float)glfwGetTime();
 	glfwSetTime(0.0f);
 
-	GUI::update(deltaTime);
+	GUI::update(m_deltaTime);
 
 	int width, height;
 	glfwGetWindowSize(m_window, &width, &height);

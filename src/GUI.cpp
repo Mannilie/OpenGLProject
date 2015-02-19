@@ -5,16 +5,12 @@ GUI* GUI::m_instance = nullptr;
 
 GUI::GUI()
 {
-	TwInit(TW_OPENGL, NULL);
+	TwInit(TW_OPENGL_CORE, nullptr);
 
 	m_window = glfwGetCurrentContext();
 	int windowWidth, windowHeight;
 	glfwGetWindowSize(m_window, &windowWidth, &windowHeight);
 	TwWindowSize(windowWidth, windowHeight);
-
-	//Use these...
-	myBar = TwNewBar("My new Bar");
-	TwAddVarRW(myBar, "NameOfMyVariable", TW_TYPE_FLOAT, &myBarFloat, "");
 
 	//Send window size events to AntTweakBar
 	glfwSetCursorPosCallback(m_window, onCursorPos);
@@ -22,6 +18,7 @@ GUI::GUI()
 	glfwSetKeyCallback(m_window, onKey);
 	glfwSetWindowSizeCallback(m_window, onWindowResize);
 	glfwSetScrollCallback(m_window, onScroll);
+	glfwSetCharCallback(m_window, onChar);
 }
 
 void GUI::create()
@@ -36,6 +33,7 @@ void GUI::update(float a_deltaTime)
 	{
 		return;
 	}
+
 	m_instance->m_window = glfwGetCurrentContext();
 	int windowWidth, windowHeight;
 	glfwGetWindowSize(m_instance->m_window, &windowWidth, &windowHeight);
@@ -54,9 +52,24 @@ void GUI::draw()
 
 void GUI::destroy()
 {
+	TwDeleteAllBars();
 	TwTerminate();
 	delete m_instance;
 	m_instance = nullptr;
+}
+
+void GUI::createNewBar(char* a_barTitle)
+{
+	m_instance->m_tweakBars[a_barTitle] = TwNewBar(a_barTitle);
+}
+
+TwBar* GUI::getBar(char* a_barTitle)
+{
+	if (m_instance->m_tweakBars.find(a_barTitle) != m_instance->m_tweakBars.end())
+	{
+		return m_instance->m_tweakBars[a_barTitle];
+	}
+	return NULL;
 }
 
 //AntTweakBar GLFW event callbacks
@@ -87,12 +100,6 @@ void GUI::onKey(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, i
 		// your code here to handle the event
 		// ...
 	}
-	if (!TwEventCharGLFW(a_key, a_action))  // send event to AntTweakBar
-	{
-		// event has not been handled by AntTweakBar
-		// your code here to handle the event
-		// ...
-	}
 }
 void GUI::onWindowResize(GLFWwindow* a_window, int a_width, int a_height)
 {
@@ -103,9 +110,20 @@ void GUI::onWindowResize(GLFWwindow* a_window, int a_width, int a_height)
 		// ...
 	}
 }
-void GUI::onScroll(GLFWwindow* window, double xoffset, double yoffset)
+void GUI::onScroll(GLFWwindow* a_window, double a_xScroll, double a_yScroll)
 {
-	if (!TwEventMouseWheelGLFW((int)yoffset))  // send event to AntTweakBar
+	if (!TwEventMouseWheelGLFW((int)a_yScroll))  // send event to AntTweakBar
+	{
+		// event has not been handled by AntTweakBar
+		// your code here to handle the event
+		// ...
+	}
+}
+
+
+void GUI::onChar(GLFWwindow* a_window, unsigned int c)
+{
+	if (!TwEventCharGLFW(c, GLFW_PRESS))
 	{
 		// event has not been handled by AntTweakBar
 		// your code here to handle the event
