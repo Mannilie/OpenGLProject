@@ -1,4 +1,4 @@
-#include "Quaternions.h"
+#include "Animation.h"
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
@@ -9,7 +9,7 @@ void onWindowResize(GLFWwindow* window, int width, int height);
 
 int main()
 {
-	Quaternions theApp;
+	Animation theApp;
 	g_theApplication = &theApp;
 	theApp.setDefault(1280, 720, "Manny's Project", true);
 	if (theApp.startup() == false) //Checks for error messages (< 0)

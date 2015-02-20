@@ -154,6 +154,8 @@ void FlyCamera::update(float a_DeltaTime)
 
 	GLFWwindow* curr_window = glfwGetCurrentContext();
 
+	//GET SIZE OF SCREEN FOR WINDOWWIDTH AND WINDOWHEIGHT
+
 	if (glfwGetKey(curr_window,
 		GLFW_KEY_W) == GLFW_PRESS)
 	{
