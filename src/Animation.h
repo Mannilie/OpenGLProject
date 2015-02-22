@@ -17,6 +17,15 @@ public:
 	float					m_timer;
 	float					m_animationSpeed;
 
+	//Lighting variables
+	vec3					m_lightDir;
+	vec3					m_lightColor;
+	vec3					m_ambientLight;
+	float					m_specularPower;
+	unsigned int			m_diffuseTexture;
+	unsigned int			m_normalTexture;
+	unsigned int			m_specularTexture;
+
 	Animation();
 	virtual bool startup();
 	virtual void shutdown();
@@ -27,6 +36,11 @@ public:
 
 	void evaluateSkeleton(FBXAnimation* a_anim, FBXSkeleton* a_skele, float a_timer);
 	void updateBones(FBXSkeleton* a_skele);
+
+
+	//Lighting
+	void loadTextures();
+
 };
 
 #endif

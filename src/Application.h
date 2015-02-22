@@ -20,8 +20,8 @@ public:
 
 	Application();
 	virtual ~Application();
-
 	void setDefault(float a_windowWidth, float a_windowHeight, char* a_appName, bool m_debugging = false);
+
 	virtual bool startup();
 	virtual void shutdown();
 	virtual bool update();

@@ -10,9 +10,7 @@
 //#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Animation::Animation()
-{
-}
+Animation::Animation(){}
 
 bool Animation::startup()
 {
@@ -28,6 +26,15 @@ bool Animation::startup()
 
 	TwAddVarRW(GUI::getBar("Camera"), "Animation Speed", TW_TYPE_FLOAT, &m_animationSpeed, "min=0.1 max=100 step=0.5");
 	//TwAddVarRW(GUI::getBar("Advanced textures"), "Spec Power", TW_TYPE_FLOAT, &m_specularPower, "group=Light min=0.1 max=100 step=0.5");
+	
+	//GUI:
+	GUI::createNewBar("Advanced textures");
+	TwAddVarRW(GUI::getBar("Advanced textures"), "Light Direction", TW_TYPE_DIR3F, &m_lightDir, "group=Light");
+	TwAddVarRW(GUI::getBar("Advanced textures"), "Light Color", TW_TYPE_COLOR4F, &m_lightColor, "group=Light");
+	TwAddVarRW(GUI::getBar("Advanced textures"), "Spec Power", TW_TYPE_FLOAT, &m_specularPower, "group=Light min=0.1 max=100 step=0.5");
+
+	//TwAddVarRW(GUI::getBar("Advanced textures"), "Spec Power", TW_TYPE_FLOAT, &m_specularPower, "group=Light min=0.1 max=100 step=0.5");
+	
 	Gizmos::create();
 
 	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
@@ -41,12 +48,18 @@ bool Animation::startup()
 	glEnable(GL_DEPTH_TEST);
 
 	m_fbxFile = new FBXFile();
-	m_fbxFile->load("./models/characters/pyro/pyro.fbx");
+	m_fbxFile->load("./models/characters/enemyelite/enemyelite.fbx");
 	m_fbxFile->initialiseOpenGLTextures();
 
+	loadTextures();
 	loadShaders("./shaders/skinned_vertex.glsl", "./shaders/skinned_fragment.glsl", &m_program);
 
 	generateGLMeshes(m_fbxFile);
+
+	m_ambientLight = vec3(0.1f);
+	m_lightDir = (vec3(-1, -1, 0));
+	m_lightColor = vec3(0.7f);
+	m_specularPower = 15;
 
 	m_timer = 0;
 	return true;
@@ -86,15 +99,7 @@ bool Animation::update()
 
 	m_timer += m_animationSpeed * m_deltaTime;
 
-
-
-
 	evaluateSkeleton(anim, skele, m_timer);
-
-	//skele->evaluate(anim, m_timer);
-
-
-
 
 	for (unsigned int i = 0; i < skele->m_boneCount; ++i)
 	{
@@ -131,13 +136,7 @@ void Animation::draw()
 
 	unsigned int diffuseUniform = glGetUniformLocation(m_program, "diffuseTexture");
 	glUniform1i(diffuseUniform, 0);
-
-	FBXSkeleton *skeleton = m_fbxFile->getSkeletonByIndex(0);
-	updateBones(skeleton);
 	
-	unsigned int bonesUniform = glGetUniformLocation(m_program, "bones");
-	glUniformMatrix4fv(bonesUniform, skeleton->m_boneCount, GL_FALSE, (float*)skeleton->m_bones);
-	/*
 	int ambientUniform =
 		glGetUniformLocation(m_program, "ambientLight");
 	int lightDirUniform =
@@ -174,8 +173,13 @@ void Animation::draw()
 	glUniform1i(diffuseLocation, 0);
 	glUniform1i(normalLocation, 1);
 	glUniform1i(specularLocation, 2);
-	*/
+	
 
+	//Load bones into shaders
+	FBXSkeleton *skeleton = m_fbxFile->getSkeletonByIndex(0);
+	updateBones(skeleton);
+	unsigned int bonesUniform = glGetUniformLocation(m_program, "bones");
+	glUniformMatrix4fv(bonesUniform, skeleton->m_boneCount, GL_FALSE, (float*)skeleton->m_bones);
 	for (unsigned int i = 0; i < m_meshes.size(); ++i)
 	{
 		FBXMeshNode* currMesh = m_fbxFile->getMeshByIndex(i);
@@ -216,6 +220,12 @@ void Animation::generateGLMeshes(FBXFile* a_fbxFile)
 
 		glBindVertexArray(m_meshes[meshIndex].m_VAO);
 
+		for (unsigned int vertIndex = 0; vertIndex < currMesh->m_vertices.size(); ++vertIndex)
+		{
+			currMesh->m_vertices[vertIndex].normal = vec4(0, 1, 0, 0);
+			currMesh->m_vertices[vertIndex].tangent = vec4(1, 0, 0, 0);
+		}
+
 		glBindBuffer(GL_ARRAY_BUFFER, m_meshes[meshIndex].m_VBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(FBXVertex)* currMesh->m_vertices.size(),
 			currMesh->m_vertices.data(), GL_STATIC_DRAW);
@@ -228,11 +238,15 @@ void Animation::generateGLMeshes(FBXFile* a_fbxFile)
 		glEnableVertexAttribArray(1); //texcoord
 		glEnableVertexAttribArray(2); //bone indices
 		glEnableVertexAttribArray(3); //bone weights
+		glEnableVertexAttribArray(4); //normal
+		glEnableVertexAttribArray(5); //tangent
 
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::PositionOffset);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::TexCoord1Offset);
 		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::IndicesOffset);
 		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::WeightsOffset);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::NormalOffset);
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::TangentOffset);
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -242,15 +256,14 @@ void Animation::generateGLMeshes(FBXFile* a_fbxFile)
 
 void Animation::evaluateSkeleton(FBXAnimation* a_anim, FBXSkeleton* a_skele, float a_timer)
 {
-	float fps = 1.0f / 24.0f;
+	float fps = 24.0f;
 
-	int currentFrame = (int)(a_timer / fps);
+	int currentFrame = (int)(a_timer * fps);
 
 	//loop through all the tracks.
 	for (unsigned int trackIndex = 0; trackIndex < a_anim->m_trackCount; ++trackIndex)
 	{
 		int trackFrameCount = a_anim->m_tracks[trackIndex].m_keyframeCount;
-
 		int trackFrame = currentFrame % trackFrameCount;
 
 		//find what keyframes are currently effecting the bones
@@ -260,7 +273,7 @@ void Animation::evaluateSkeleton(FBXAnimation* a_anim, FBXSkeleton* a_skele, flo
 			a_anim->m_tracks[trackIndex].m_keyframes[(trackFrame + 1) % trackFrameCount];
 
 		//interpolate between those keyframes to generate the matrix for the current pose
-		float timeSinceFrameFlip = a_timer - currentFrame;
+		float timeSinceFrameFlip = a_timer - (currentFrame / fps);
 		float t = timeSinceFrameFlip * fps;
 
 		vec3 newPos = glm::mix(currFrame.m_translation, nextFrame.m_translation, t);
@@ -275,7 +288,10 @@ void Animation::evaluateSkeleton(FBXAnimation* a_anim, FBXSkeleton* a_skele, flo
 		int boneIndex = a_anim->m_tracks[trackIndex].m_boneIndex;
 
 		//set the FBXNode's local transforms to match
-		a_skele->m_nodes[boneIndex]->m_localTransform = localTransform;
+		if (boneIndex < a_skele->m_boneCount) //Could of wrote wrapped entire function body in this
+		{
+			a_skele->m_nodes[boneIndex]->m_localTransform = localTransform;
+		}
 	}
 }
 
@@ -304,6 +320,54 @@ void Animation::updateBones(FBXSkeleton* a_skele)
 		a_skele->m_bones[boneIndex] = a_skele->m_bones[boneIndex] * a_skele->m_bindPoses[boneIndex];
 	}
 }
+
+void Animation::loadTextures()
+{
+	int width, height, channels;
+
+	unsigned char *data = stbi_load("./models/characters/enemyelite/EnemyElite1_D.tga",
+		&width, &height, &channels, STBI_default);
+
+	glGenTextures(1, &m_diffuseTexture);
+	glBindTexture(GL_TEXTURE_2D, m_diffuseTexture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	stbi_image_free(data);
+
+	data = stbi_load("./models/characters/enemyelite/EnemyElite_N.tga",
+		&width, &height, &channels, STBI_default);
+
+	glGenTextures(1, &m_normalTexture);
+	glBindTexture(GL_TEXTURE_2D, m_normalTexture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	stbi_image_free(data);
+
+	data = stbi_load("./models/characters/enemyelite/EnemyElite_S.tga",
+		&width, &height, &channels, STBI_default);
+
+	glGenTextures(1, &m_specularTexture);
+	glBindTexture(GL_TEXTURE_2D, m_specularTexture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	stbi_image_free(data);
+}
+
 
 /*
 //FIXED CODE//

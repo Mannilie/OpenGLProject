@@ -15,6 +15,8 @@ bool Texturing::startup()
 	{
 		return false;
 	}
+
+
 	Gizmos::create();
 
 	loadTexture("./textures/pirateflag.png");

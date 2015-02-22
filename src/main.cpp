@@ -2,36 +2,36 @@
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
-Application* g_theApplication;
+Application* g_Application;
 
 bool runApp();
 void onWindowResize(GLFWwindow* window, int width, int height);
 
 int main()
 {
-	Animation theApp;
-	g_theApplication = &theApp;
-	theApp.setDefault(1280, 720, "Manny's Project", true);
-	if (theApp.startup() == false) //Checks for error messages (< 0)
+	Animation App;
+	g_Application = &App;
+	App.setDefault(1280, 720, "Manny's Project", true);
+	if (App.startup() == false) //Checks for error messages (< 0)
 	{
 		return -1;
 	}
-	glfwSetWindowSizeCallback(theApp.m_window, onWindowResize);
-	while (theApp.update() == true)
+	glfwSetWindowSizeCallback(App.m_window, onWindowResize);
+	while (App.update() == true)
 	{
-		theApp.draw();
+		App.draw();
 	}
-	theApp.shutdown();
+	App.shutdown();
 	return 0;
 }
 
 bool runApp()
 {
-	if (g_theApplication->update() == false)
+	if (g_Application->update() == false)
 	{
 		return false;
 	}
-	g_theApplication->draw();
+	g_Application->draw();
 	return true;
 }
 

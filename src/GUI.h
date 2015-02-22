@@ -29,8 +29,7 @@ public:
 	static void onKey(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, int a_mods);
 	static void onWindowResize(GLFWwindow* a_window, int a_width, int a_height);
 	static void onScroll(GLFWwindow* a_window, double a_xScroll, double a_yScroll);
-
-	static void onChar(GLFWwindow* a_window, unsigned int c);
+	static void onChar(GLFWwindow* a_window, unsigned int a_char);
 };
 
 #endif
