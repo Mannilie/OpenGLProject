@@ -1,4 +1,4 @@
-#include "Animation.h"
+#include "GPUParticles.h"
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
@@ -9,7 +9,7 @@ void onWindowResize(GLFWwindow* window, int width, int height);
 
 int main()
 {
-	Animation App;
+	GPUParticles App;
 	g_Application = &App;
 	App.setDefault(1280, 720, "Manny's Project", true);
 	if (App.startup() == false) //Checks for error messages (< 0)

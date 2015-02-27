@@ -23,7 +23,7 @@ bool Lighting::startup()
 
 	Gizmos::create();
 
-	loadShaders("./shaders/lighting_vertex.glsl", "./shaders/lighting_fragment.glsl", &m_program);
+	loadShaders("./shaders/lighting_vertex.glsl", 0, "./shaders/lighting_fragment.glsl", &m_program);
 
 	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
 	m_flyCamera.m_fieldOfView = 60.0f;
@@ -55,7 +55,7 @@ bool Lighting::startup()
 void Lighting::reloadShader()
 {
 	glDeleteProgram(m_program);
-	loadShaders("./shaders/lighting_vertex.glsl", "./shaders/lighting_fragment.glsl", &m_program);
+	loadShaders("./shaders/lighting_vertex.glsl", 0, "./shaders/lighting_fragment.glsl", &m_program);
 }
 
 void Lighting::shutdown()

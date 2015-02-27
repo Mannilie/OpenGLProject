@@ -85,6 +85,8 @@
     <ClInclude Include="src\GLM_Header.h" />
     <ClInclude Include="src\gl_core_4_4.h" />
     <ClInclude Include="src\GL_Header.h" />
+    <ClInclude Include="src\GPUEmitter.h" />
+    <ClInclude Include="src\GPUParticles.h" />
     <ClInclude Include="src\GUI.h" />
     <ClInclude Include="src\IntroToOpenGL.h" />
     <ClInclude Include="src\Lighting.h" />
@@ -104,6 +106,8 @@
     <ClCompile Include="src\CameraAndProjections.cpp" />
     <ClCompile Include="src\Gizmos.cpp" />
     <ClCompile Include="src\gl_core_4_4.c" />
+    <ClCompile Include="src\GPUEmitter.cpp" />
+    <ClCompile Include="src\GPUParticles.cpp" />
     <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\IntroToOpenGL.cpp" />
     <ClCompile Include="src\Lighting.cpp" />
@@ -115,6 +119,10 @@
     <ClCompile Include="src\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\shaders\gpu_particle_frag.glsl" />
+    <None Include="data\shaders\gpu_particle_geom.glsl" />
+    <None Include="data\shaders\gpu_particle_vert.glsl" />
+    <None Include="data\shaders\particle_update_vert.glsl" />
     <None Include="data\shaders\rendergeometry_fragment.glsl" />
     <None Include="data\shaders\lighting_fragment.glsl" />
     <None Include="data\shaders\lighting_vertex.glsl" />

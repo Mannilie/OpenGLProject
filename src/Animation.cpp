@@ -52,7 +52,7 @@ bool Animation::startup()
 	m_fbxFile->initialiseOpenGLTextures();
 
 	loadTextures();
-	loadShaders("./shaders/skinned_vertex.glsl", "./shaders/skinned_fragment.glsl", &m_program);
+	loadShaders("./shaders/skinned_vertex.glsl", 0, "./shaders/skinned_fragment.glsl", &m_program);
 
 	generateGLMeshes(m_fbxFile);
 

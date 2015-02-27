@@ -23,7 +23,7 @@ bool RenderingGeometry::startup()
 	TwAddVarRW(GUI::getBar("Rendering Geo bar"), "Wireframe", TW_TYPE_BOOL32, &m_wireframe, "");
 
 	loadTexture("./textures/pirateflag.png");
-	loadShaders("./shaders/textured_vertex.glsl", "./shaders/textured_fragment.glsl", &m_programID);
+	loadShaders("./shaders/textured_vertex.glsl", 0, "./shaders/textured_fragment.glsl", &m_programID);
 	generateGrid(100, 100);
 
 	Gizmos::create();

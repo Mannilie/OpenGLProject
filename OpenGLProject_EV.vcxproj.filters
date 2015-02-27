@@ -50,6 +50,12 @@
     <Filter Include="Resources\shaders\Animation">
       <UniqueIdentifier>{cea058e0-0981-4442-83e4-09be0017501c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GPUParticles">
+      <UniqueIdentifier>{2fb7a603-dcda-4ca6-aaae-a1a87e14659f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\shaders\GPUParticles">
+      <UniqueIdentifier>{cff4941b-9321-464b-95cd-979855ea020d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CameraAndProjections.h">
@@ -105,6 +111,12 @@
     </ClInclude>
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\GUI.h" />
+    <ClInclude Include="src\GPUParticles.h">
+      <Filter>GPUParticles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GPUEmitter.h">
+      <Filter>GPUParticles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp">
@@ -149,6 +161,12 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\GPUParticles.cpp">
+      <Filter>GPUParticles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GPUEmitter.cpp">
+      <Filter>GPUParticles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\textured_fragment.glsl">
@@ -180,6 +198,18 @@
     </None>
     <None Include="data\shaders\skinned_fragment.glsl">
       <Filter>Resources\shaders\Animation</Filter>
+    </None>
+    <None Include="data\shaders\gpu_particle_vert.glsl">
+      <Filter>Resources\shaders\GPUParticles</Filter>
+    </None>
+    <None Include="data\shaders\gpu_particle_geom.glsl">
+      <Filter>Resources\shaders\GPUParticles</Filter>
+    </None>
+    <None Include="data\shaders\gpu_particle_frag.glsl">
+      <Filter>Resources\shaders\GPUParticles</Filter>
+    </None>
+    <None Include="data\shaders\particle_update_vert.glsl">
+      <Filter>Resources\shaders\GPUParticles</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

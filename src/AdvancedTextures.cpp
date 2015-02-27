@@ -32,7 +32,7 @@ bool AdvancedTextures::startup()
 	Gizmos::create();
 
 	loadTextures();
-	loadShaders("./shaders/normal_mapped_vertex.glsl", "./shaders/normal_mapped_fragment.glsl", &m_program);
+	loadShaders("./shaders/normal_mapped_vertex.glsl", 0, "./shaders/normal_mapped_fragment.glsl", &m_program);
 	generateQuat(5.0f);
 
 	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
@@ -49,6 +49,7 @@ bool AdvancedTextures::startup()
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
+
 	return true;
 }
 

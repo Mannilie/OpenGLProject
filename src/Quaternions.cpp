@@ -21,7 +21,7 @@ bool Quaternions::startup()
 	}
 	Gizmos::create();
 
-	loadShaders("./shaders/normal_mapped_vertex.glsl", "./shaders/normal_mapped_fragment.glsl", &m_program);
+	loadShaders("./shaders/normal_mapped_vertex.glsl", 0, "./shaders/normal_mapped_fragment.glsl", &m_program);
 	
 	m_hipFrames[0].position		= vec3(0, 5, 0);
 	m_hipFrames[0].rotation		= glm::quat(vec3(-1, 0, 0));

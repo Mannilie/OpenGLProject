@@ -20,7 +20,7 @@ bool Texturing::startup()
 	Gizmos::create();
 
 	loadTexture("./textures/pirateflag.png");
-	loadShaders("./shaders/textured_vertex.glsl", "./shaders/textured_fragment.glsl", &m_program);
+	loadShaders("./shaders/textured_vertex.glsl", 0, "./shaders/textured_fragment.glsl", &m_program);
 
 	generateQuat(5.0f);
 
