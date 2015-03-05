@@ -81,12 +81,14 @@ void Camera::setPerspective(float a_fieldOfView, float a_width, float a_height, 
 void Camera::setLookAt(vec3 a_from, vec3 a_to, vec3 a_up)
 { 
 	m_view = glm::lookAt(a_from, a_to, a_up);
+	m_world = glm::inverse(m_view);
 	updateProjView();
 }
 
 void Camera::setPosition(vec3 a_pos)
 {
-	m_pos = a_pos;
+	m_world[3] = vec4(a_pos, 1);
+	m_view = glm::inverse(m_world);
 }
 
 mat4 Camera::getWorldTransform()
@@ -124,13 +126,11 @@ FlyCamera::FlyCamera()
 	, m_up(vec3(0, 1, 0))
 	, m_yaw(0)
 	, m_pitch(0)
-	, Camera(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0), 60.0f, 1280, 720, 0.1f, 1000.0f)
 {
 }
 
 FlyCamera::FlyCamera(float a_fieldOfView, float a_aspect, float a_moveSpeed) 
-	: Camera(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0), a_fieldOfView, a_aspect, 0.1f, 1000.0f)
-	, m_moveSpeed(a_moveSpeed)
+	: m_moveSpeed(a_moveSpeed)
 	, m_fovSpeed(10.0f)
 	, m_yaw(0)
 	, m_pitch(0)
@@ -203,8 +203,8 @@ void FlyCamera::update(float a_DeltaTime)
 		mouseX *= -m_sensitivity;
 		mouseY *= -m_sensitivity;
 
-		m_yaw += mouseX;
-		m_pitch += mouseY;
+		m_yaw += (float)mouseX;
+		m_pitch += (float)mouseY;
 
 		if (m_pitch >= glm::radians(90.f))
 		{

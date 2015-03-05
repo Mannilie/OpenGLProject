@@ -67,10 +67,11 @@ bool loadShaders(char* a_vertShaderFile,
 	*a_result = glCreateProgram();
 	
 	unsigned int vertShader;
-	
-	loadShaderType(a_vertShaderFile, GL_VERTEX_SHADER, &vertShader);
-	glAttachShader(*a_result, vertShader);
-	glDeleteShader(vertShader);
+	if (loadShaderType(a_vertShaderFile, GL_VERTEX_SHADER, &vertShader))
+	{
+		glAttachShader(*a_result, vertShader);
+		glDeleteShader(vertShader);
+	}
 
 	if (a_geomShaderFile != nullptr)
 	{
@@ -88,9 +89,11 @@ bool loadShaders(char* a_vertShaderFile,
 	if (a_fragShaderFile != nullptr)
 	{
 		unsigned int fragShader;
-		loadShaderType(a_fragShaderFile, GL_FRAGMENT_SHADER, &fragShader);
-		glAttachShader(*a_result, fragShader);
-		glDeleteShader(fragShader);
+		if (loadShaderType(a_fragShaderFile, GL_FRAGMENT_SHADER, &fragShader))
+		{
+			glAttachShader(*a_result, fragShader);
+			glDeleteShader(fragShader);
+		}
 	}
 
 	glLinkProgram(*a_result);

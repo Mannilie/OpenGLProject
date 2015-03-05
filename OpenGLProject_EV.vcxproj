@@ -81,6 +81,7 @@
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\CameraAndProjections.h" />
+    <ClInclude Include="src\Collisions.h" />
     <ClInclude Include="src\Gizmos.h" />
     <ClInclude Include="src\GLM_Header.h" />
     <ClInclude Include="src\gl_core_4_4.h" />
@@ -92,6 +93,7 @@
     <ClInclude Include="src\Lighting.h" />
     <ClInclude Include="src\Quaternions.h" />
     <ClInclude Include="src\RenderingGeometry.h" />
+    <ClInclude Include="src\SceneManagement.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\Texturing.h" />
     <ClInclude Include="src\tiny_obj_loader.h" />
@@ -104,6 +106,7 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CameraAndProjections.cpp" />
+    <ClCompile Include="src\Collisions.cpp" />
     <ClCompile Include="src\Gizmos.cpp" />
     <ClCompile Include="src\gl_core_4_4.c" />
     <ClCompile Include="src\GPUEmitter.cpp" />
@@ -114,6 +117,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Quaternions.cpp" />
     <ClCompile Include="src\RenderingGeometry.cpp" />
+    <ClCompile Include="src\SceneManagement.cpp" />
     <ClCompile Include="src\Texturing.cpp" />
     <ClCompile Include="src\tiny_obj_loader.cc" />
     <ClCompile Include="src\Utility.cpp" />

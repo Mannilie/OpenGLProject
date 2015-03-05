@@ -6,7 +6,7 @@
 //gpu particle struct
 struct GPUParticle
 {
-	GPUParticle() : lifespan(0), lifetime(1) {}
+	GPUParticle() : lifetime(1), lifespan(0){}
 	vec3	position;
 	vec3	velocity;
 	float	lifetime;
@@ -24,8 +24,8 @@ public:
 	GPUPointEmitter(); 
 	~GPUPointEmitter();
 	
-	void init(unsigned int a_maxParticles,
-		vec3  a_position,
+	void initialise(unsigned int a_maxParticles,
+		vec4  a_position,
 		float a_emitRate,
 		float a_minLifespan,
 		float a_maxLifespan,
@@ -44,18 +44,23 @@ public:
 	void createUpdateShader();
 	void createDrawShader();
 
+	float	m_emitRate; //extra
 
 	GPUParticle* m_particles;
+
 	unsigned int m_maxParticles;
 
-	vec3	m_position;
-	float	m_emitRate;
+	vec4	m_position;
+
 	float	m_minLifespan;
 	float	m_maxLifespan;
+	
 	float	m_minVelocity;
 	float	m_maxVelocity;
+	
 	float	m_startSize;
 	float	m_endSize;
+	
 	vec4	m_startColor;
 	vec4	m_endColor;
 
@@ -63,8 +68,8 @@ public:
 	unsigned int m_VAO[2];
 	unsigned int m_VBO[2];
 
-	unsigned int m_updateShader;
 	unsigned int m_drawShader;
+	unsigned int m_updateShader;
 
 	float m_lastDrawTime;
 };

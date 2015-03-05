@@ -285,7 +285,7 @@ void Animation::evaluateSkeleton(FBXAnimation* a_anim, FBXSkeleton* a_skele, flo
 			glm::scale(newScale);
 
 		//get the right track for the given bone
-		int boneIndex = a_anim->m_tracks[trackIndex].m_boneIndex;
+		unsigned int boneIndex = a_anim->m_tracks[trackIndex].m_boneIndex;
 
 		//set the FBXNode's local transforms to match
 		if (boneIndex < a_skele->m_boneCount) //Could of wrote wrapped entire function body in this

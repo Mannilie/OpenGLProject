@@ -15,6 +15,7 @@ protected:
 	float m_windowHeight;
 	float m_deltaTime;
 	bool m_debugging;
+	float m_gameTime;
 public:
 	GLFWwindow* m_window;
 

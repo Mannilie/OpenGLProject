@@ -28,8 +28,6 @@ bool CameraAndProjections::startup()
 	return true;
 }
 
-
-
 void CameraAndProjections::shutdown()
 {
 	Gizmos::destroy();

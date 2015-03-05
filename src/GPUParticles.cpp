@@ -22,29 +22,28 @@ bool GPUParticles::startup()
 	Gizmos::create();
 
 	//CREATE GUI FOR CAMERA INSIDE (DEBUGGING)
-	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
+	m_flyCamera = FlyCamera();
 	m_flyCamera.m_fieldOfView = 60.0f;
-	m_flyCamera.m_aspect = m_windowWidth / m_windowHeight;
 	m_flyCamera.setMoveSpeed(100.0f);
-	m_flyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
 	m_flyCamera.setFOVSpeed(100.0f);
+	m_flyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
-	m_emitter.init(10000,
-		vec3(0, 0, 0), //Position
+	m_emitter.initialise(100000,
+		vec4(0, 0, 0, 0), //Position
 		0,			   //Emit rate
-		3,			   //Min life span
-		3,			   //Max life span 
-		0.8f,          //Min velocity
-		1.0f,		   //Max velocity
-		0.1f,			   //Start size
-		0.01f,			   //End size
-		vec4(1, 0.4, 0, 1), //Start color
-		vec4(1, 0, 0, 1));  //End color
+		0.1f,			   //Min life span
+		5.0f,			   //Max life span 
+		2,          //Min velocity
+		10,		   //Max velocity
+		1.0f,			   //Start size
+		0.1f,			   //End size
+		vec4(1, 0, 0, 1), //Start color
+		vec4(1, 1, 0, 1));  //End color
 
-	m_time = 0;
+	m_time = 0.0f;
 	return true;
 }
 
@@ -54,6 +53,7 @@ bool GPUParticles::update()
 	{
 		return false;
 	}
+
 	Gizmos::clear();
 
 	Gizmos::addTransform(mat4(1));
@@ -75,8 +75,6 @@ bool GPUParticles::update()
 	m_flyCamera.m_windowWidth = m_windowWidth;
 	m_flyCamera.m_windowHeight = m_windowHeight;
 	m_flyCamera.update(m_deltaTime);
-
-	m_time += m_deltaTime;
 	return true;
 }
 
@@ -84,9 +82,9 @@ void GPUParticles::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	m_emitter.draw(m_time, m_flyCamera.m_world, m_flyCamera.m_projView);
-
 	Gizmos::draw(m_flyCamera.m_projView);
+
+	m_emitter.draw(m_gameTime, m_flyCamera.m_world, m_flyCamera.getProjView());
 
 	Application::draw();
 }

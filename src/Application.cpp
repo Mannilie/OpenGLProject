@@ -86,15 +86,16 @@ void Application::shutdown()
 bool Application::update()
 {
 	//Checks if the user is closing the window
-	if(glfwWindowShouldClose(m_window) == true)
+	if(glfwWindowShouldClose(m_window))
 	{
 		//Returns false if the window is to be closed
 		return false;
 	}
-
 	//Sets up delta time
 	m_deltaTime = (float)glfwGetTime();
 	glfwSetTime(0.0f);
+
+	m_gameTime += m_deltaTime;
 
 	//Updates GUI
 	GUI::update(m_deltaTime);

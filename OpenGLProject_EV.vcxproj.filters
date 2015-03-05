@@ -56,6 +56,9 @@
     <Filter Include="Resources\shaders\GPUParticles">
       <UniqueIdentifier>{cff4941b-9321-464b-95cd-979855ea020d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneManagement">
+      <UniqueIdentifier>{b8ec0f1c-9361-471d-8f05-b1492bde1a1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CameraAndProjections.h">
@@ -117,6 +120,12 @@
     <ClInclude Include="src\GPUEmitter.h">
       <Filter>GPUParticles</Filter>
     </ClInclude>
+    <ClInclude Include="src\SceneManagement.h">
+      <Filter>SceneManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Collisions.h">
+      <Filter>SceneManagement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp">
@@ -166,6 +175,12 @@
     </ClCompile>
     <ClCompile Include="src\GPUEmitter.cpp">
       <Filter>GPUParticles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneManagement.cpp">
+      <Filter>SceneManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Collisions.cpp">
+      <Filter>SceneManagement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
