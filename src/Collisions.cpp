@@ -1,3 +1,4 @@
+
 #include "Collisions.h"
 
 #include <iostream>
@@ -135,8 +136,15 @@ void getFrustumPlanes(const mat4& a_transform, vec4* a_planes)
 
 }
 
-
 void drawFrustum(const mat4& a_transform)
 {
+	float near = a_transform[2][3] / (a_transform[2][2] - 1.0f);
+	float far = a_transform[2][3] / (a_transform[2][2] + 1.0f);
+
+	float aspect = a_transform[0][0] * far;
+
+	//float fov = 2 * atan(())
+
+	//float hNear = 2 * tan()
 
 }

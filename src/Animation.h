@@ -6,11 +6,22 @@
 #include "FBXFile.h"
 #include "Vertex.h"
 
+#include <thread>
+using std::thread;
+
+#include <iostream>
+
+typedef unsigned int GLuint;
+
 class Animation : public Application
 {
 private:
-	unsigned int m_program;
 public:
+	unsigned int m_program;
+	bool m_fbxLoaded;
+	bool m_meshloaded;
+	thread processThread;
+
 	std::vector<OpenGLData> m_meshes;
 	FBXFile*				m_fbxFile;
 	FlyCamera				m_flyCamera;
@@ -27,6 +38,7 @@ public:
 	unsigned int			m_specularTexture;
 
 	Animation();
+	~Animation();
 	virtual bool startup();
 	virtual void shutdown();
 	virtual bool update();
@@ -37,10 +49,16 @@ public:
 	void evaluateSkeleton(FBXAnimation* a_anim, FBXSkeleton* a_skele, float a_timer);
 	void updateBones(FBXSkeleton* a_skele);
 
-
 	//Lighting
 	void loadTextures();
 
+	//Mesh functions
+	void startLoadMeshThread(char* a_fileName);
+	void loadFBXMesh(char* a_fileName);
+
+	void initMeshOpenGL();
+	void updateMesh();
+	void drawMesh();
 };
 
 #endif

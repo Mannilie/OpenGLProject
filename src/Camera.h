@@ -3,6 +3,8 @@
 
 #include "GLM_Header.h"
 
+struct GLFWwindow;
+
 class Camera
 {
 public:
@@ -22,6 +24,8 @@ public:
 
 	float m_windowWidth;
 	float m_windowHeight;
+
+	GLFWwindow* curr_window;
 
 	Camera();
 	Camera(vec3 a_pos, vec3 a_center, vec3 a_up, float a_fieldOfView, float a_aspect, float a_near, float a_far);

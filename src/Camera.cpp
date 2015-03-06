@@ -126,6 +126,7 @@ FlyCamera::FlyCamera()
 	, m_up(vec3(0, 1, 0))
 	, m_yaw(0)
 	, m_pitch(0)
+	, Camera(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0), 60.0f, 720 / 1080, 0.1f, 1000.0f)
 {
 }
 
@@ -134,6 +135,7 @@ FlyCamera::FlyCamera(float a_fieldOfView, float a_aspect, float a_moveSpeed)
 	, m_fovSpeed(10.0f)
 	, m_yaw(0)
 	, m_pitch(0)
+	, Camera(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0), 60.0f, 720 / 1080, 0.1f, 1000.0f)
 {
 }
 
@@ -152,7 +154,7 @@ void FlyCamera::update(float a_DeltaTime)
 		m_aspect = m_windowWidth / m_windowHeight;
 	}
 
-	GLFWwindow* curr_window = glfwGetCurrentContext();
+	curr_window = glfwGetCurrentContext();
 
 	//GET SIZE OF SCREEN FOR WINDOWWIDTH AND WINDOWHEIGHT
 

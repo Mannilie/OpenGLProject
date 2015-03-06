@@ -67,11 +67,9 @@ bool loadShaders(char* a_vertShaderFile,
 	*a_result = glCreateProgram();
 	
 	unsigned int vertShader;
-	if (loadShaderType(a_vertShaderFile, GL_VERTEX_SHADER, &vertShader))
-	{
-		glAttachShader(*a_result, vertShader);
-		glDeleteShader(vertShader);
-	}
+	loadShaderType(a_vertShaderFile, GL_VERTEX_SHADER, &vertShader);
+	glAttachShader(*a_result, vertShader);
+	glDeleteShader(vertShader);
 
 	if (a_geomShaderFile != nullptr)
 	{

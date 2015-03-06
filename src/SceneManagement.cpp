@@ -97,9 +97,11 @@ bool SceneManagement::update()
 	vec4 planes[6];
 	getFrustumPlanes(m_flyCamera.getProjView(), planes);
 
-	for (int planeIndex = 0; planeIndex < 6; ++planeIndex)
-	{
-	}
+	drawFrustum(m_flyCamera.m_proj);
+
+	//for (int planeIndex = 0; planeIndex < 6; ++planeIndex)
+	//{
+	//}
 	return true;
 }
 

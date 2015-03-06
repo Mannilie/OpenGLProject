@@ -36,5 +36,6 @@ public:
 
 void getFrustumPlanes(const mat4& a_transform, vec4* a_planes);
 
+void drawFrustum(const mat4& a_transform);
 
 #endif

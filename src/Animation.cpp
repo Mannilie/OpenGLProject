@@ -1,16 +1,39 @@
 #include "Animation.h"
 #include "GLM_Header.h"
 #include "GL_Header.h"
-
 #include "Gizmos.h"
-
-#include "Vertex.h"
 #include "Utility.h"
+#include "Vertex.h"
 
 //#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 Animation::Animation(){}
+
+Animation::~Animation()
+{
+	processThread.join();
+}
+
+void Animation::loadFBXMesh(char* a_fileName)
+{
+	std::cout << "loading mesh..." << std::endl;
+	m_fbxFile->load(a_fileName);
+	m_fbxLoaded = true;
+}
+
+void Animation::initMeshOpenGL()
+{
+	m_fbxFile->initialiseOpenGLTextures();
+	generateGLMeshes(m_fbxFile);
+	loadShaders("./shaders/skinned_vertex.glsl", 0, "./shaders/skinned_fragment.glsl", &m_program);
+	loadTextures();
+}
+
+void Animation::startLoadMeshThread(char* a_fileName)
+{
+	processThread = thread(&Animation::loadFBXMesh, this, a_fileName);
+}
 
 bool Animation::startup()
 {
@@ -18,7 +41,6 @@ bool Animation::startup()
 	{
 		return false;
 	}
-
 	//GUI:
 	GUI::createNewBar("Camera");
 	TwAddVarRW(GUI::getBar("Camera"), "Mouse sensitivity", TW_TYPE_FLOAT, &m_flyCamera.m_sensitivity, "min=0.1 max=100 step=0.5");
@@ -37,31 +59,27 @@ bool Animation::startup()
 	
 	Gizmos::create();
 
-	m_flyCamera = FlyCamera(60.0f, m_windowWidth / m_windowHeight, 10.0f);
+	m_flyCamera = FlyCamera();
 	m_flyCamera.m_fieldOfView = 60.0f;
-	m_flyCamera.m_aspect = m_windowWidth / m_windowHeight;
 	m_flyCamera.setMoveSpeed(100.0f);
-	m_flyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
 	m_flyCamera.setFOVSpeed(100.0f);
+	m_flyCamera.setLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-
-	m_fbxFile = new FBXFile();
-	m_fbxFile->load("./models/characters/enemyelite/enemyelite.fbx");
-	m_fbxFile->initialiseOpenGLTextures();
-
-	loadTextures();
-	loadShaders("./shaders/skinned_vertex.glsl", 0, "./shaders/skinned_fragment.glsl", &m_program);
-
-	generateGLMeshes(m_fbxFile);
 
 	m_ambientLight = vec3(0.1f);
 	m_lightDir = (vec3(-1, -1, 0));
 	m_lightColor = vec3(0.7f);
 	m_specularPower = 15;
-
 	m_timer = 0;
+
+	m_fbxLoaded = false;
+	m_meshloaded = false;
+
+	m_fbxFile = new FBXFile();
+	startLoadMeshThread("./models/characters/enemyelite/enemyelite.fbx");
+
 	return true;
 }
 
@@ -76,8 +94,23 @@ bool Animation::update()
 	{
 		return false;
 	}
-	Gizmos::clear();
 
+	//Check if the FBX file has been loaded
+	if (m_fbxLoaded)
+	{
+		m_meshloaded = true; //Now now draw and update the mesh later in program
+		initMeshOpenGL();
+		std::cout << "mesh loaded!" << std::endl;
+		m_fbxLoaded = false;
+	}
+
+	//Update the mesh once it's loaded
+	if (m_meshloaded)
+	{
+		updateMesh();
+	}
+
+	Gizmos::clear();
 	Gizmos::addTransform(mat4(1));
 
 	vec4 white(1);
@@ -94,31 +127,8 @@ bool Animation::update()
 			i == 10 ? red : black);
 	}
 
-	FBXSkeleton* skele = m_fbxFile->getSkeletonByIndex(0);
-	FBXAnimation* anim = m_fbxFile->getAnimationByIndex(0);
-
-	m_timer += m_animationSpeed * m_deltaTime;
-
-	evaluateSkeleton(anim, skele, m_timer);
-
-	for (unsigned int i = 0; i < skele->m_boneCount; ++i)
-	{
-		skele->m_nodes[i]->updateGlobalTransform();
-		
-		mat4 nodeGlobal = skele->m_nodes[i]->m_globalTransform;
-		vec3 nodePos = nodeGlobal[3].xyz;
-		
-		Gizmos::addAABBFilled(nodePos, vec3(3.0f), vec4(1, 0, 0, 1), &nodeGlobal);
-
-		if (skele->m_nodes[i]->m_parent != nullptr)
-		{
-			vec3 parentPos = skele->m_nodes[i]->m_parent->m_globalTransform[3].xyz;
-			Gizmos::addLine(nodePos, parentPos, vec4(0, 1, 0, 1));
-		}
-	}
-
-	m_flyCamera.m_windowWidth = m_windowWidth;
 	m_flyCamera.m_windowHeight = m_windowHeight;
+	m_flyCamera.m_windowWidth = m_windowWidth;
 	m_flyCamera.update(m_deltaTime);
 	return true;
 }
@@ -134,9 +144,49 @@ void Animation::draw()
 		glUniformMatrix4fv(projViewHandle, 1, GL_FALSE, (float*)&m_flyCamera.m_projView);
 	}
 
+	//Draw the mesh once it's loaded
+	if (m_meshloaded)
+	{
+		drawMesh();
+	}
+
+	Gizmos::draw(m_flyCamera.m_projView);
+
+	Application::draw();
+}
+
+
+void Animation::updateMesh()
+{
+	FBXSkeleton* skele = m_fbxFile->getSkeletonByIndex(0);
+	FBXAnimation* anim = m_fbxFile->getAnimationByIndex(0);
+
+	m_timer += m_animationSpeed * m_deltaTime;
+
+	evaluateSkeleton(anim, skele, m_timer);
+
+	for (unsigned int i = 0; i < skele->m_boneCount; ++i)
+	{
+		skele->m_nodes[i]->updateGlobalTransform();
+
+		mat4 nodeGlobal = skele->m_nodes[i]->m_globalTransform;
+		vec3 nodePos = nodeGlobal[3].xyz;
+
+		Gizmos::addAABBFilled(nodePos, vec3(3.0f), vec4(1, 0, 0, 1), &nodeGlobal);
+
+		if (skele->m_nodes[i]->m_parent != nullptr)
+		{
+			vec3 parentPos = skele->m_nodes[i]->m_parent->m_globalTransform[3].xyz;
+			Gizmos::addLine(nodePos, parentPos, vec4(0, 1, 0, 1));
+		}
+	}
+}
+
+void Animation::drawMesh()
+{
 	unsigned int diffuseUniform = glGetUniformLocation(m_program, "diffuseTexture");
 	glUniform1i(diffuseUniform, 0);
-	
+
 	int ambientUniform =
 		glGetUniformLocation(m_program, "ambientLight");
 	int lightDirUniform =
@@ -173,7 +223,7 @@ void Animation::draw()
 	glUniform1i(diffuseLocation, 0);
 	glUniform1i(normalLocation, 1);
 	glUniform1i(specularLocation, 2);
-	
+
 
 	//Load bones into shaders
 	FBXSkeleton *skeleton = m_fbxFile->getSkeletonByIndex(0);
@@ -184,22 +234,18 @@ void Animation::draw()
 	{
 		FBXMeshNode* currMesh = m_fbxFile->getMeshByIndex(i);
 		mat4 worldTransform = m_fbxFile->getMeshByIndex(i)->m_globalTransform;
-		
+
 		FBXMaterial* meshMaterial = currMesh->m_material;
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, meshMaterial->textures[FBXMaterial::DiffuseTexture]->handle);		
-		
+		glBindTexture(GL_TEXTURE_2D, meshMaterial->textures[FBXMaterial::DiffuseTexture]->handle);
+
 		unsigned int worldUniform = glGetUniformLocation(m_program, "world");
 		glUniformMatrix4fv(worldUniform, 1, GL_FALSE, (float*)&worldTransform);
 
 		glBindVertexArray(m_meshes[i].m_VAO);
 		glDrawElements(GL_TRIANGLES, m_meshes[i].m_indexCount, GL_UNSIGNED_INT, 0);
 	}
-
-	Gizmos::draw(m_flyCamera.m_projView);
-
-	Application::draw();
 }
 
 void Animation::generateGLMeshes(FBXFile* a_fbxFile)
@@ -285,7 +331,7 @@ void Animation::evaluateSkeleton(FBXAnimation* a_anim, FBXSkeleton* a_skele, flo
 			glm::scale(newScale);
 
 		//get the right track for the given bone
-		unsigned int boneIndex = a_anim->m_tracks[trackIndex].m_boneIndex;
+		int boneIndex = a_anim->m_tracks[trackIndex].m_boneIndex;
 
 		//set the FBXNode's local transforms to match
 		if (boneIndex < a_skele->m_boneCount) //Could of wrote wrapped entire function body in this
